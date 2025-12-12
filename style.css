@@ -1,0 +1,99 @@
+body {
+    /* 中央に配置 */
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    min-height: 100vh;
+    margin: 0;
+    background-color: #333;
+    font-family: 'Arial', sans-serif;
+    color: #fff;
+    padding: 0; /* 余白を削除 */
+}
+
+.game-container {
+    display: flex;
+    gap: 30px;
+    border: 5px solid #1a1a1a;
+    background-color: #444;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    /* 常に横並びに戻す */
+    flex-direction: row; 
+}
+
+/* ゲームボードの枠 */
+#tetris-canvas {
+    border: 3px solid #000;
+    background-color: #111;
+    display: block; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.info {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.info h2 {
+    margin-top: 0;
+    color: #00f0f0;
+}
+
+/* 🌟 追加: ホールドとネクストを包むコンテナ（横並び用） */
+.side-info-container {
+    display: flex;
+    gap: 10px; /* ホールドとネクストの間隔 */
+    margin-bottom: 5px;
+}
+
+.hold-slot, .next-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* タイトルとキャンバスを中央揃え */
+}
+
+/* 🌟 修正: ホールドピースキャンバスの枠 (サイズ維持) */
+#hold-piece-canvas {
+    border: 1px solid #777; 
+    background-color: #222;
+    margin-bottom: 0; /* 親コンテナにマージンを移動 */
+    width: 120px; 
+    height: 120px;
+}
+
+/* 🌟 修正: Nextピースキャンバスの枠 (サイズ縮小) */
+#next-piece-canvas {
+    border: 1px solid #777; 
+    background-color: #222;
+    margin-bottom: 0; /* 親コンテナにマージンを移動 */
+    width: 80px; /* 縮小 */
+    height: 80px; /* 縮小 */
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #00f0f0;
+    color: #111;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #00cccc;
+}
+
+.controls {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px dashed #777;
+    border-radius: 5px;
+    font-size: 0.9em;
+}

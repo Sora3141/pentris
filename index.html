@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Pentomino</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container"> 
+        <canvas id="tetris-canvas" width="240" height="440"></canvas>
+        <div class="info">
+            <h2>JS Pentomino</h2>
+            <p>Score: <span id="score">0</span></p>
+            
+            <div class="side-info-container">
+                <div class="hold-slot">
+                    <p>Hold:</p>
+                    <canvas id="hold-piece-canvas" width="120" height="120"></canvas>
+                </div>
+                
+                <div class="next-slot">
+                    <p>Next:</p>
+                    <canvas id="next-piece-canvas" width="80" height="80"></canvas>
+                </div>
+            </div>
+            <button onclick="startGame()">Start Game</button>
+            <p class="controls">
+                **操作方法:**<br>
+                ← →: 移動<br>
+                ↓: ソフトドロップ (加速落下)<br>
+                Space: ハードドロップ (即時落下)<br>
+                ↑ or Z: 回転<br>
+                **C: ホールド**
+            </p>
+        </div>
+    </div>
+    <script src="Tetris.js"></script>
+</body>
+</html>
