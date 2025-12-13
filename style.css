@@ -42,7 +42,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    /* 🌟 PCでは info全体はボードの右側 */
 }
 
 .info h2 {
@@ -50,7 +49,7 @@ body {
     color: #00f0f0;
 }
 
-/* Hold, Next, Startボタンの配置を縦にする */
+/* Hold, Next, Startボタンを縦に並べるコンテナ (PC表示用) */
 .side-panel-content {
     display: flex;
     flex-direction: column; 
@@ -101,15 +100,22 @@ button:hover {
     background-color: #00cccc;
 }
 
+/* 🌟 PC向けのデフォルト設定: 操作説明を表示 */
+.controls {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px dashed #777;
+    border-radius: 5px;
+    font-size: 0.9em;
+    display: block; /* PCでは表示 */
+}
 
-/* ========================================================================= */
-/* PC/タブレット向けのデフォルト設定: モバイルボタンを非表示にする */
-/* ========================================================================= */
+/* 🌟 PC向けのデフォルト設定: モバイルボタンを非表示 */
 .mobile-controls {
     display: none; 
 }
 
-/* モバイルコントロールの基本スタイル */
+/* 🌟 モバイルコントロールの基本スタイル */
 .mobile-controls {
     flex-direction: column;
     gap: 10px;
@@ -146,86 +152,90 @@ button:hover {
 
 /* ========================================================================= */
 /* 🌟 スマートフォン向けのメディアクエリ (画面幅 600px 以下) */
-/* メイン画面の右隣に情報パネルを横並びで配置する */
 /* ========================================================================= */
 @media (max-width: 600px) {
     
     body {
         padding: 0; 
+        margin: 0;
         max-width: 100vw; 
     }
 
     .game-container {
-        /* 🌟 修正: スマホでもボードと info を横並びにする */
-        flex-direction: row; 
-        gap: 5px; /* 🌟 修正: 情報パネルとの間隔を狭くする */
-        padding: 5px; /* 🌟 修正: コンテナのパディングを狭くする */
-        
-        /* 画面幅いっぱいになるようにする */
-        width: auto; 
-        margin: 0;
-        border-radius: 0; 
-        border-left: none; 
-        border-right: none;
-        border-top: none; /* 🌟 枠線を削除 */
-        border-bottom: none; /* 🌟 枠線を削除 */
-        background-color: #333; /* 背景色をbodyと同じにし、境界を目立たなくする */
-        box-shadow: none; /* 影を削除 */
+        /* 🌟 全体の幅を固定して縮小された要素を収める (約307px) */
+        width: 307px; 
+        flex-direction: row; /* 横並びを維持 */
+        gap: 5px; 
+        padding: 5px; 
+        border: none; 
+        box-shadow: none; 
+        background-color: #333; 
+        margin: 0 auto; /* 中央寄せ */
     }
     
+    /* 🌟 メインキャンバスを縮小 (全体サイズを小さくする対応) */
     #tetris-canvas {
-        /* 🌟 修正: ボードの枠線を削除し、画面に密着させる */
+        transform: scale(0.8); /* 80%に縮小 (240px -> 192px) */
+        transform-origin: top left; /* 左上を起点に縮小 */
+        /* 縮小した分のスペースを占有するように幅を設定 */
+        width: 192px; /* 240 * 0.8 */
+        height: 352px; /* 440 * 0.8 */
         border: none;
         box-shadow: none;
     }
 
     .info {
-        /* 🌟 修正: 情報パネル全体が横並びで表示されるように調整 */
-        align-items: flex-start; /* 左寄せに戻す */
+        /* 🌟 情報パネルの幅を狭くする */
+        width: 100px; 
+        min-width: 100px;
+        align-items: flex-start; 
         text-align: left;
-        gap: 5px; /* 情報間の間隔を狭くする */
-    }
-
-    /* スコア、ホールド/ネクスト、スタートボタンを縦に並べるコンテナ */
-    .side-panel-content {
-        gap: 5px; /* 情報間の間隔を狭くする */
-    }
-
-    /* Hold と Next を横並びに戻す */
-    .side-info-container {
-        justify-content: flex-start;
-        gap: 5px; /* 🌟 修正: ホールドとネクストの間隔を狭くする */
-    }
-
-    #hold-piece-canvas {
-        width: 60px; /* 🌟 修正: ホールドキャンバスのサイズを縮小 */
-        height: 60px;
+        gap: 5px; 
     }
     
-    #next-piece-canvas {
-        width: 60px; /* 🌟 修正: ネクストキャンバスのサイズを縮小 */
-        height: 60px; 
+    .info h2 {
+        font-size: 1.2em;
+        margin-top: 5px;
+    }
+    
+    .info p {
+        font-size: 0.8em;
+    }
+    
+    /* 🌟 Hold と Next を密接に配置 */
+    .side-info-container {
+        justify-content: flex-start;
+        gap: 5px; 
     }
 
-    .info h2, .info p {
+    /* 🌟 Hold/Next のキャンバスサイズを大幅に縮小 */
+    #hold-piece-canvas, #next-piece-canvas {
+        width: 50px; 
+        height: 50px;
+    }
+
+    .hold-slot p, .next-slot p {
+        font-size: 0.7em;
         margin: 0;
-        padding: 0;
-        font-size: 0.9em; /* フォントを少し小さくする */
     }
-
+    
     .side-panel-content button {
         padding: 5px;
-        font-size: 0.9em;
+        font-size: 0.8em;
     }
 
-    /* 🌟 モバイルボタンを表示し、画面幅いっぱいに広げる */
+    /* 🌟 PC操作説明を非表示 */
+    .controls {
+        display: none; 
+    }
+
+    /* 🌟 モバイルボタンを表示し、ゲームコンテナと同じ幅にする */
     .mobile-controls {
         display: flex; 
-        width: 100%; 
-        margin-top: 0; /* ゲームとの間隔を詰める */
-        margin-bottom: 5px; 
-        padding: 5px 5px; /* 🌟 修正: 左右のパディングを狭くする */
-        box-sizing: border-box; 
+        width: 307px; /* .game-containerと同じ幅に設定 */
+        margin: 10px auto; /* 上下に余白と中央寄せ */
+        padding: 0 5px; 
+        box-sizing: border-box;
     }
 
     .mobile-controls button {
