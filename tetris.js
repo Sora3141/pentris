@@ -548,55 +548,23 @@ if (btnDown) {
         }
     };
     
-    // PC/モバイル両方に対応
+    // 🌟 修正: touchstart に e.preventDefault() を適用し、ソフトドロップの長押し開始時にスクロール/ズームを防止
     btnDown.addEventListener('mousedown', startSoftDrop);
     btnDown.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         startSoftDrop();
     });
 
     btnDown.addEventListener('mouseup', stopSoftDrop);
     btnDown.addEventListener('touchend', stopSoftDrop);
-    btnDown.addEventListener('touchcancel', stopSoftDrop); // タッチがキャンセルされた場合も停止
+    btnDown.addEventListener('touchcancel', stopSoftDrop); 
 }
 
-// ==================== 🌟 追加: タッチ操作によるズーム・スクロール防止 ====================
+// ==================== 🌟 修正: タッチ操作によるズーム・スクロール防止 (広範囲なものは削除) ====================
 
-function preventTouchDefaults(element) {
-    if (element) {
-        // 1. タップ時のデフォルト動作（スクロール、ズーム）を防止
-        // { passive: false } を指定して e.preventDefault() が機能するようにする
-        element.addEventListener('touchstart', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-        
-        // 2. タッチムーブ時のデフォルト動作（スクロール）を防止
-        element.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-        }, { passive: false });
-    }
-}
-
-// ゲームボード全体を防止対象にする
-preventTouchDefaults(document.getElementById('tetris-canvas'));
-
-// モバイル操作ボタン全てを防止対象にする
-const mobileControlsDiv = document.querySelector('.mobile-controls');
-if (mobileControlsDiv) {
-    // ボタンコンテナ自体に適用（ボタン間のスペースでのスクロール防止）
-    preventTouchDefaults(mobileControlsDiv); 
-
-    // 個別ボタンにも適用
-    preventTouchDefaults(btnLeft);
-    preventTouchDefaults(btnRight);
-    preventTouchDefaults(btnDown);
-    preventTouchDefaults(btnRotate);
-    preventTouchDefaults(btnHarddrop);
-    preventTouchDefaults(btnHold);
-}
-
-// その他の要素も必要に応じて追加（例: ホールド/ネクストキャンバス）
-preventTouchDefaults(document.getElementById('hold-piece-canvas'));
-preventTouchDefaults(document.getElementById('next-piece-canvas'));
+// 🌟 以前定義した広範囲に preventDefault を適用する関数は削除しました。
+// 🌟 代わりに、タッチイベントの preventDefault はボタン (`btnDown` の `touchstart`) の内部でのみ行います。
+// 🌟 これにより、タッチ移動や回転などの動作がSafariで阻害されるのを防ぎます。
+// 🌟 なお、CSSで `touch-action: manipulation` を指定することで、ダブルタップズームは抑制されます。
 
 // =====================================================================
