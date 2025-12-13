@@ -4,14 +4,15 @@ body {
     justify-content: center;
     align-items: center; 
     min-height: 100vh;
-    margin: 0 auto; 
+    margin: 0; /* 🌟 修正: 左右の余白をなくす */
     background-color: #333;
     font-family: 'Arial', sans-serif;
     color: #fff;
-    padding: 20px 0; 
+    padding: 20px 0; /* 上下のパディングは維持 */
     flex-direction: column; 
     box-sizing: border-box; 
     
+    /* 🌟 修正: max-widthとoverflow-xを削除または調整し、画面幅を完全に利用 */
     max-width: 100vw; 
     overflow-x: hidden;
 }
@@ -24,9 +25,9 @@ body {
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    flex-direction: row; /* 🌟 PCのデフォルト: 横並び */
+    flex-direction: row; /* PCのデフォルト: 横並び */
     max-width: 100%; 
-    margin: 0 auto; 
+    margin: 0; /* 🌟 修正: 自動マージンを削除 */
 }
 
 /* ゲームボードの枠 */
@@ -42,7 +43,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    /* 🌟 PCでは info全体はボードの右側 */
 }
 
 .info h2 {
@@ -50,7 +50,7 @@ body {
     color: #00f0f0;
 }
 
-/* 🌟 PC時: Hold, Next, Startボタンの配置を縦にする */
+/* PC時: Hold, Next, Startボタンの配置を縦にする */
 .side-panel-content {
     display: flex;
     flex-direction: column; 
@@ -101,7 +101,6 @@ button:hover {
     background-color: #00cccc;
 }
 
-/* 🌟 削除: .controls スタイルを削除 */
 
 /* ========================================================================= */
 /* PC/タブレット向けのデフォルト設定: モバイルボタンを非表示にする */
@@ -114,7 +113,7 @@ button:hover {
 .mobile-controls {
     flex-direction: column;
     gap: 10px;
-    margin: 0 auto; 
+    margin: 0; /* 🌟 修正: 自動マージンを削除 */
 }
 
 .mobile-controls .movement-row {
@@ -147,41 +146,47 @@ button:hover {
 
 /* ========================================================================= */
 /* 🌟 スマートフォン向けのメディアクエリ (画面幅 600px 以下) */
-/* メイン画面の下に情報パネルを縦に配置する */
+/* 左右の余白をなくすように変更 */
 /* ========================================================================= */
 @media (max-width: 600px) {
     
     body {
-        padding: 10px; 
-        max-width: calc(100vw - 20px); 
+        padding: 0; /* 🌟 修正: 左右のパディングを削除 */
+        max-width: 100vw; 
     }
 
     .game-container {
-        /* 🌟 変更: スマホではボードと info を縦に並べる */
+        /* ボードと info を縦に並べる */
         flex-direction: column; 
         gap: 10px;
         padding: 10px;
-        width: 240px; 
-        margin: 0 auto;
+        /* 🌟 修正: 左右の余白をなくすため、幅を自動調整に戻し、中央寄せを無効化 */
+        width: 100%; 
+        border-left: none; /* 左右の枠線を削除 */
+        border-right: none;
+        margin: 0;
+        border-radius: 0; /* スマホでは角丸を削除して画面いっぱいに */
     }
     
     .info {
-        /* 🌟 変更: info 全体をゲームボードの下で中央寄せにする */
+        /* info 全体をゲームボードの下で中央寄せにする */
         align-items: center;
         text-align: center;
     }
 
-    /* 🌟 変更: Hold と Next を横並びに戻す */
+    /* Hold と Next を横並びに戻す */
     .side-info-container {
         justify-content: center;
     }
 
-    /* 🌟 変更: スマホでモバイルボタンを表示し、ゲームボードと同じ幅にする */
+    /* 🌟 モバイルボタンを表示し、画面幅いっぱいに広げる */
     .mobile-controls {
         display: flex; 
-        width: 240px; 
+        width: 100%; /* 画面幅いっぱいに */
         margin-top: 15px;
         margin-bottom: 15px; 
+        padding: 0 10px; /* 🌟 ボタン同士は詰めるが、画面端から少し離すために左右にパディング */
+        box-sizing: border-box; 
     }
 
     .mobile-controls button {
