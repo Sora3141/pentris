@@ -1,3 +1,13 @@
+/* 🌟 追加: 全体のタッチアクションを無効化して、意図しないズームやスクロールを抑制 */
+html, body {
+    touch-action: manipulation;
+    -webkit-overflow-scrolling: none; /* iOSでの慣性スクロールを防止 */
+    overscroll-behavior: none; /* Chrome/Edgeでの画面端のスクロールバウンスを防止 */
+    /* 🌟 body, htmlの高さが100%であることを保証 */
+    height: 100%;
+    width: 100%;
+}
+
 body {
     /* 中央に配置 */
     display: flex;
@@ -8,7 +18,8 @@ body {
     background-color: #333;
     font-family: 'Arial', sans-serif;
     color: #fff;
-    padding: 20px 0; /* 上下のパディングは維持 */
+    /* 🌟 修正: PC表示でも上部のパディングは維持しつつ、上下中央寄せを優先 */
+    padding: 20px 0; 
     flex-direction: column; 
     box-sizing: border-box; 
     
@@ -100,7 +111,7 @@ button:hover {
     background-color: #00cccc;
 }
 
-/* 🌟 PC向けのデフォルト設定: 操作説明を表示 */
+/* PC向けのデフォルト設定: 操作説明を表示 */
 .controls {
     margin-top: 20px;
     padding: 10px;
@@ -110,12 +121,12 @@ button:hover {
     display: block; /* PCでは表示 */
 }
 
-/* 🌟 PC向けのデフォルト設定: モバイルボタンを非表示 */
+/* PC向けのデフォルト設定: モバイルボタンを非表示 */
 .mobile-controls {
     display: none; 
 }
 
-/* 🌟 モバイルコントロールの基本スタイル */
+/* モバイルコントロールの基本スタイル */
 .mobile-controls {
     flex-direction: column;
     gap: 10px;
@@ -156,36 +167,45 @@ button:hover {
 @media (max-width: 600px) {
     
     body {
+        /* 🌟 修正: 上下のパディングを削除し、余分なスペースをなくす */
         padding: 0; 
-        margin: 0;
+        
+        /* 画面中央寄せを無効化し、コンテンツを上端に寄せる */
+        justify-content: flex-start; 
+        align-items: center; 
+        
         max-width: 100vw; 
     }
 
     .game-container {
-        /* 🌟 全体の幅を固定して縮小された要素を収める (約307px) */
+        /* 🌟 修正: 上部の余分なスペースを詰めるため、上マージンを削除 */
+        margin-top: 0; 
+        
+        /* 縮小されたゲーム全体を中央寄せ */
+        margin-left: auto;
+        margin-right: auto;
+        
         width: 307px; 
-        flex-direction: row; /* 横並びを維持 */
+        flex-direction: row; 
         gap: 5px; 
         padding: 5px; 
         border: none; 
         box-shadow: none; 
         background-color: #333; 
-        margin: 0 auto; /* 中央寄せ */
+        border-radius: 0;
     }
     
-    /* 🌟 メインキャンバスを縮小 (全体サイズを小さくする対応) */
+    /* 🌟 メインキャンバスを縮小 */
     #tetris-canvas {
-        transform: scale(0.8); /* 80%に縮小 (240px -> 192px) */
-        transform-origin: top left; /* 左上を起点に縮小 */
-        /* 縮小した分のスペースを占有するように幅を設定 */
-        width: 192px; /* 240 * 0.8 */
-        height: 352px; /* 440 * 0.8 */
+        transform: scale(0.8); 
+        transform-origin: top left; 
+        width: 192px; 
+        height: 352px; 
         border: none;
         box-shadow: none;
     }
 
     .info {
-        /* 🌟 情報パネルの幅を狭くする */
         width: 100px; 
         min-width: 100px;
         align-items: flex-start; 
@@ -202,13 +222,13 @@ button:hover {
         font-size: 0.8em;
     }
     
-    /* 🌟 Hold と Next を密接に配置 */
+    /* Hold と Next を密接に配置 */
     .side-info-container {
         justify-content: flex-start;
         gap: 5px; 
     }
 
-    /* 🌟 Hold/Next のキャンバスサイズを大幅に縮小 */
+    /* Hold/Next のキャンバスサイズを大幅に縮小 */
     #hold-piece-canvas, #next-piece-canvas {
         width: 50px; 
         height: 50px;
@@ -224,7 +244,7 @@ button:hover {
         font-size: 0.8em;
     }
 
-    /* 🌟 PC操作説明を非表示 */
+    /* PC操作説明を非表示 */
     .controls {
         display: none; 
     }
@@ -233,7 +253,7 @@ button:hover {
     .mobile-controls {
         display: flex; 
         width: 307px; /* .game-containerと同じ幅に設定 */
-        margin: 10px auto; /* 上下に余白と中央寄せ */
+        margin: 10px auto; 
         padding: 0 5px; 
         box-sizing: border-box;
     }
