@@ -8,8 +8,9 @@ body {
     background-color: #333;
     font-family: 'Arial', sans-serif;
     color: #fff;
-    padding: 20px 0; /* 上下の余白を追加してボタンが見切れないように */
-    flex-direction: column; /* 🌟 変更: game-container と mobile-controls を縦に並べる */
+    padding: 20px 0; 
+    flex-direction: column; 
+    box-sizing: border-box; /* 🌟 追加: パディングを幅に含める */
 }
 
 .game-container {
@@ -20,8 +21,8 @@ body {
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    /* 常に横並びに戻す */
     flex-direction: row; 
+    max-width: 100%; /* 🌟 追加: 親要素の幅を超えないようにする */
 }
 
 /* ゲームボードの枠 */
@@ -44,35 +45,32 @@ body {
     color: #00f0f0;
 }
 
-/* 🌟 追加: ホールドとネクストを包むコンテナ（横並び用） */
 .side-info-container {
     display: flex;
-    gap: 10px; /* ホールドとネクストの間隔 */
+    gap: 10px; 
     margin-bottom: 5px;
 }
 
 .hold-slot, .next-slot {
     display: flex;
     flex-direction: column;
-    align-items: center; /* タイトルとキャンバスを中央揃え */
+    align-items: center; 
 }
 
-/* 🌟 修正: ホールドピースキャンバスの枠 (サイズ維持) */
 #hold-piece-canvas {
     border: 1px solid #777; 
     background-color: #222;
-    margin-bottom: 0; /* 親コンテナにマージンを移動 */
+    margin-bottom: 0; 
     width: 120px; 
     height: 120px;
 }
 
-/* 🌟 修正: Nextピースキャンバスの枠 (サイズ縮小) */
 #next-piece-canvas {
     border: 1px solid #777; 
     background-color: #222;
-    margin-bottom: 0; /* 親コンテナにマージンを移動 */
-    width: 80px; /* 縮小 */
-    height: 80px; /* 縮小 */
+    margin-bottom: 0; 
+    width: 80px; 
+    height: 80px; 
 }
 
 button {
@@ -99,11 +97,64 @@ button:hover {
     font-size: 0.9em;
 }
 
-/* 🌟 追加: モバイル操作用ボタンのコンテナスタイル */
+
+/* ========================================================================= */
+/* 🌟 PC/タブレット向けのデフォルト設定: モバイルボタンを非表示にする */
+/* ========================================================================= */
 .mobile-controls {
-    margin-top: 20px;
-    width: 300px; /* ゲームボードの幅に合わせて調整 */
-    display: flex;
+    display: none; /* 🌟 変更: PCサイズではモバイルボタンを非表示 */
+}
+
+/* ========================================================================= */
+/* 🌟 スマートフォン向けのメディアクエリ (画面幅 600px 以下) */
+/* 画面に収まらない問題を解消し、ボタンを表示する */
+/* ========================================================================= */
+@media (max-width: 600px) {
+    
+    body {
+        /* スマホで横スクロールバーが出ないように padding を調整 */
+        padding: 10px; 
+    }
+
+    .game-container {
+        /* 🌟 変更: スマホではボードと情報パネルを縦に並べる */
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+        /* ボードの幅に合わせてコンテナの幅を調整 */
+        width: 240px; 
+        margin-top: 0;
+    }
+
+    .info {
+        /* 縦並びになった info ボックスを中央寄せにする */
+        align-items: center;
+        text-align: center;
+    }
+
+    .side-info-container {
+        /* info ボックス内で中央に配置 */
+        justify-content: center;
+    }
+
+    /* 🌟 変更: スマホサイズでモバイルボタンを表示 */
+    .mobile-controls {
+        display: flex; 
+        /* game-containerと同じ幅に合わせる */
+        width: 240px; 
+        margin-top: 15px;
+    }
+
+    .mobile-controls button {
+        padding: 10px;
+        font-size: 1em; 
+    }
+}
+
+
+/* 🌟 モバイルコントロールの基本的な表示スタイル（スマホで表示される部分） */
+/* このブロックはメディアクエリの外に配置し、サイズ調整はクエリ内で行う */
+.mobile-controls {
     flex-direction: column;
     gap: 10px;
 }
@@ -115,8 +166,6 @@ button:hover {
 }
 
 .mobile-controls button {
-    padding: 15px 10px;
-    font-size: 1.2em;
     font-weight: bold;
     background-color: #00f0f0;
     color: #111;
@@ -124,11 +173,10 @@ button:hover {
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s, transform 0.1s;
-    flex-grow: 1; /* ボタンを均等幅にする */
-    min-width: 0; /* flexアイテムの最小幅をリセット */
+    flex-grow: 1; 
+    min-width: 0; 
 }
 
-/* ソフトドロップボタンは長押しイベント用に特別なスタイル */
 #btn-down {
     background-color: #ffaa00;
 }
