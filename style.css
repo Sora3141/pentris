@@ -4,7 +4,7 @@ body {
     justify-content: center;
     align-items: center; 
     min-height: 100vh;
-    margin: 0 auto; /* 🌟 修正: 左右中央寄せのため auto に変更 */
+    margin: 0 auto; 
     background-color: #333;
     font-family: 'Arial', sans-serif;
     color: #fff;
@@ -12,7 +12,6 @@ body {
     flex-direction: column; 
     box-sizing: border-box; 
     
-    /* 🌟 追加: スマホでの最大表示幅を制限し、横スクロールを防止 */
     max-width: 100vw; 
     overflow-x: hidden;
 }
@@ -25,9 +24,8 @@ body {
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    flex-direction: row; 
+    flex-direction: row; /* 🌟 PCのデフォルト: 横並び */
     max-width: 100%; 
-    /* 🌟 追加: スマホ対応のため、デフォルトで中央配置を明示 */
     margin: 0 auto; 
 }
 
@@ -44,6 +42,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    /* 🌟 PCでは info全体はボードの右側 */
 }
 
 .info h2 {
@@ -51,9 +50,16 @@ body {
     color: #00f0f0;
 }
 
+/* 🌟 PC時: Hold, Next, Startボタンの配置を縦にする */
+.side-panel-content {
+    display: flex;
+    flex-direction: column; 
+    gap: 10px;
+}
+
 .side-info-container {
     display: flex;
-    gap: 10px; 
+    gap: 10px; /* ホールドとネクストの間隔 */
     margin-bottom: 5px;
 }
 
@@ -95,14 +101,7 @@ button:hover {
     background-color: #00cccc;
 }
 
-.controls {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px dashed #777;
-    border-radius: 5px;
-    font-size: 0.9em;
-}
-
+/* 🌟 削除: .controls スタイルを削除 */
 
 /* ========================================================================= */
 /* PC/タブレット向けのデフォルト設定: モバイルボタンを非表示にする */
@@ -111,11 +110,11 @@ button:hover {
     display: none; 
 }
 
-/* 🌟 モバイルコントロールの基本的な表示スタイル */
+/* 🌟 モバイルコントロールの基本スタイル */
 .mobile-controls {
     flex-direction: column;
     gap: 10px;
-    margin: 0 auto; /* 中央寄せ */
+    margin: 0 auto; 
 }
 
 .mobile-controls .movement-row {
@@ -148,43 +147,41 @@ button:hover {
 
 /* ========================================================================= */
 /* 🌟 スマートフォン向けのメディアクエリ (画面幅 600px 以下) */
+/* メイン画面の下に情報パネルを縦に配置する */
 /* ========================================================================= */
 @media (max-width: 600px) {
     
     body {
-        /* 左右に余白を作り、ゲーム全体を画面に収める */
         padding: 10px; 
-        /* 🌟 100vwから左右のpaddingを引いた幅を最大とする */
         max-width: calc(100vw - 20px); 
     }
 
     .game-container {
-        /* ボードと情報パネルを縦に並べる */
-        flex-direction: column;
+        /* 🌟 変更: スマホではボードと info を縦に並べる */
+        flex-direction: column; 
         gap: 10px;
         padding: 10px;
-        /* 🌟 ゲームボード(240px)の幅に合わせてコンテナの幅を調整 */
         width: 240px; 
         margin: 0 auto;
     }
     
     .info {
-        /* 縦並びになった info ボックスを中央寄せにする */
+        /* 🌟 変更: info 全体をゲームボードの下で中央寄せにする */
         align-items: center;
         text-align: center;
     }
 
+    /* 🌟 変更: Hold と Next を横並びに戻す */
     .side-info-container {
-        /* info ボックス内で中央に配置 */
         justify-content: center;
     }
-    
-    /* 🌟 モバイルボタンを表示し、ゲームボードと同じ幅にする */
+
+    /* 🌟 変更: スマホでモバイルボタンを表示し、ゲームボードと同じ幅にする */
     .mobile-controls {
         display: flex; 
         width: 240px; 
         margin-top: 15px;
-        margin-bottom: 15px; /* 下部にも余白を追加 */
+        margin-bottom: 15px; 
     }
 
     .mobile-controls button {

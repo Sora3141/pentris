@@ -13,27 +13,22 @@
             <h2>JS Pentomino</h2>
             <p>Score: <span id="score">0</span></p>
             
-            <div class="side-info-container">
-                <div class="hold-slot">
-                    <p>Hold:</p>
-                    <canvas id="hold-piece-canvas" width="120" height="120"></canvas>
+            <div class="side-panel-content">
+                <div class="side-info-container">
+                    <div class="hold-slot">
+                        <p>Hold:</p>
+                        <canvas id="hold-piece-canvas" width="120" height="120"></canvas>
+                    </div>
+                    
+                    <div class="next-slot">
+                        <p>Next:</p>
+                        <canvas id="next-piece-canvas" width="80" height="80"></canvas>
+                    </div>
                 </div>
-                
-                <div class="next-slot">
-                    <p>Next:</p>
-                    <canvas id="next-piece-canvas" width="80" height="80"></canvas>
-                </div>
+                <button onclick="startGame()">Start Game</button>
             </div>
-            <button onclick="startGame()">Start Game</button>
-            <p class="controls">
-                **操作方法:**<br>
-                ← →: 移動<br>
-                ↓: ソフトドロップ (加速落下)<br>
-                Space: ハードドロップ (即時落下)<br>
-                ↑ or Z: 回転<br>
-                **C: ホールド**
-            </p>
-        </div>
+            
+            </div>
     </div>
 
     <div class="mobile-controls">
