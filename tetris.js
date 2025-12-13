@@ -479,3 +479,83 @@ document.addEventListener('keyup', (e) => {
         }
     }
 });
+
+
+// ==================== 🌟 追加: モバイルボタン操作 ====================
+
+// ボタンの取得
+const btnLeft = document.getElementById('btn-left');
+const btnRight = document.getElementById('btn-right');
+const btnDown = document.getElementById('btn-down');
+const btnRotate = document.getElementById('btn-rotate');
+const btnHarddrop = document.getElementById('btn-harddrop');
+const btnHold = document.getElementById('btn-hold');
+
+// 基本的なアクション（移動、回転、ハードドロップ、ホールド）
+if (btnLeft) btnLeft.addEventListener('click', () => { 
+    if (currentPiece) {
+        pieceMove(-1, 0); 
+        drawBoard(); 
+    }
+});
+if (btnRight) btnRight.addEventListener('click', () => { 
+    if (currentPiece) {
+        pieceMove(1, 0); 
+        drawBoard(); 
+    }
+});
+if (btnRotate) btnRotate.addEventListener('click', () => { 
+    if (currentPiece) {
+        pieceRotate(); 
+        drawBoard(); 
+    }
+});
+if (btnHarddrop) btnHarddrop.addEventListener('click', () => { 
+    if (currentPiece) {
+        hardDrop(); 
+        drawBoard();
+        drawHoldPiece(); 
+        drawNextPiece(); 
+        if (!currentPiece) gameOver(); 
+    }
+});
+if (btnHold) btnHold.addEventListener('click', () => { 
+    if (currentPiece) {
+        holdCurrentPiece(); 
+        drawBoard();
+        drawHoldPiece(); 
+        drawNextPiece(); 
+        if (!currentPiece) gameOver(); 
+    }
+});
+
+
+// ソフトドロップ (長押しで加速、離すと通常速度に戻る)
+if (btnDown) {
+    const startSoftDrop = () => {
+        if (currentPiece && currentDropInterval === dropInterval) {
+            currentDropInterval = dropInterval / SOFT_DROP_MULTIPLIER;
+            resetGameLoop(currentDropInterval);
+            pieceMove(0, 1); // 最初の1マス移動
+            drawBoard(); 
+        }
+    };
+
+    const stopSoftDrop = () => {
+        if (currentDropInterval !== dropInterval) {
+            currentDropInterval = dropInterval;
+            resetGameLoop(currentDropInterval);
+        }
+    };
+    
+    // PC/モバイル両方に対応
+    btnDown.addEventListener('mousedown', startSoftDrop);
+    btnDown.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        startSoftDrop();
+    });
+
+    btnDown.addEventListener('mouseup', stopSoftDrop);
+    btnDown.addEventListener('touchend', stopSoftDrop);
+    btnDown.addEventListener('touchcancel', stopSoftDrop); // タッチがキャンセルされた場合も停止
+}

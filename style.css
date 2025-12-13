@@ -8,7 +8,8 @@ body {
     background-color: #333;
     font-family: 'Arial', sans-serif;
     color: #fff;
-    padding: 0; /* 余白を削除 */
+    padding: 20px 0; /* 上下の余白を追加してボタンが見切れないように */
+    flex-direction: column; /* 🌟 変更: game-container と mobile-controls を縦に並べる */
 }
 
 .game-container {
@@ -96,4 +97,43 @@ button:hover {
     border: 1px dashed #777;
     border-radius: 5px;
     font-size: 0.9em;
+}
+
+/* 🌟 追加: モバイル操作用ボタンのコンテナスタイル */
+.mobile-controls {
+    margin-top: 20px;
+    width: 300px; /* ゲームボードの幅に合わせて調整 */
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mobile-controls .movement-row {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+}
+
+.mobile-controls button {
+    padding: 15px 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    background-color: #00f0f0;
+    color: #111;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    flex-grow: 1; /* ボタンを均等幅にする */
+    min-width: 0; /* flexアイテムの最小幅をリセット */
+}
+
+/* ソフトドロップボタンは長押しイベント用に特別なスタイル */
+#btn-down {
+    background-color: #ffaa00;
+}
+
+.mobile-controls button:active {
+    transform: scale(0.95);
+    background-color: #00cccc;
 }
