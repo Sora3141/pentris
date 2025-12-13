@@ -491,7 +491,26 @@ const btnRotate = document.getElementById('btn-rotate');
 const btnHarddrop = document.getElementById('btn-harddrop');
 const btnHold = document.getElementById('btn-hold');
 
-// 基本的なアクション（移動、回転、ハードドロップ、ホールド）
+// 🌟 新規関数: 全てのボタンに touchstart で preventDefault を追加する
+function addTouchPreventDefault(button) {
+    if (button) {
+        button.addEventListener('touchstart', (e) => {
+            // Safariでボタンタップがスクロールとして誤認識されるのを防ぐ
+            e.preventDefault(); 
+        }, { passive: false });
+    }
+}
+
+// 全ての操作ボタンに防止処理を適用
+addTouchPreventDefault(btnLeft);
+addTouchPreventDefault(btnRight);
+addTouchPreventDefault(btnRotate);
+addTouchPreventDefault(btnHarddrop);
+addTouchPreventDefault(btnHold);
+// btnDownは下に独自のtouchstartロジックがあるため、そこに追加する
+
+
+// 基本的なアクション（移動、回転、ハードドロップ、ホールド） - click イベントで実行
 if (btnLeft) btnLeft.addEventListener('click', () => { 
     if (currentPiece) {
         pieceMove(-1, 0); 
@@ -536,7 +555,7 @@ if (btnDown) {
         if (currentPiece && currentDropInterval === dropInterval) {
             currentDropInterval = dropInterval / SOFT_DROP_MULTIPLIER;
             resetGameLoop(currentDropInterval);
-            pieceMove(0, 1); // 最初の1マス移動
+            pieceMove(0, 1); 
             drawBoard(); 
         }
     };
@@ -548,23 +567,22 @@ if (btnDown) {
         }
     };
     
-    // 🌟 修正: touchstart に e.preventDefault() を適用し、ソフトドロップの長押し開始時にスクロール/ズームを防止
+    // 🌟 修正: btnDownにもtouchstartでpreventDefaultを適用
     btnDown.addEventListener('mousedown', startSoftDrop);
     btnDown.addEventListener('touchstart', (e) => {
         e.preventDefault(); 
         startSoftDrop();
-    });
+    }, { passive: false }); // passive: false を維持
 
     btnDown.addEventListener('mouseup', stopSoftDrop);
     btnDown.addEventListener('touchend', stopSoftDrop);
     btnDown.addEventListener('touchcancel', stopSoftDrop); 
 }
 
-// ==================== 🌟 修正: タッチ操作によるズーム・スクロール防止 (広範囲なものは削除) ====================
+// ==================== 🌟 タッチ操作によるズーム・スクロール防止 (ボタンに限定) ====================
 
-// 🌟 以前定義した広範囲に preventDefault を適用する関数は削除しました。
-// 🌟 代わりに、タッチイベントの preventDefault はボタン (`btnDown` の `touchstart`) の内部でのみ行います。
-// 🌟 これにより、タッチ移動や回転などの動作がSafariで阻害されるのを防ぎます。
-// 🌟 なお、CSSで `touch-action: manipulation` を指定することで、ダブルタップズームは抑制されます。
+// 🌟 CSSの `touch-action: manipulation` と併用し、
+// 🌟 各モバイルボタンの `touchstart` で `e.preventDefault()` を実行することで、
+// 🌟 Safariでのクリック認識を向上させています。
 
 // =====================================================================
