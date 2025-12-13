@@ -156,10 +156,10 @@ function drawNextPiece() {
     if (!nextCtx || !nextCanvas) return;
     
     // 🌟 修正: ネクストピースのキャンバスサイズに基づいた、新しいブロックサイズを計算
-    const canvasWidth = nextCanvas.width; // 80
-    const canvasHeight = nextCanvas.height; // 80
-    const maxDimension = 5; // ペントミノの最大ブロック数 (Yピースが 5x1)
-    const pieceBlockSize = Math.floor(canvasWidth / maxDimension); // 80 / 5 = 16
+    const canvasWidth = nextCanvas.width; 
+    const canvasHeight = nextCanvas.height; 
+    const maxDimension = 5; 
+    const pieceBlockSize = Math.floor(canvasWidth / maxDimension); 
 
     nextCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -193,10 +193,10 @@ function drawHoldPiece() {
     if (!holdCtx || !holdCanvas) return;
     
     // 🌟 修正: ホールドピースのキャンバスサイズに基づいた、新しいブロックサイズを計算
-    const canvasWidth = holdCanvas.width; // 120
-    const canvasHeight = holdCanvas.height; // 120
-    const maxDimension = 6; // ホールドピースが最大 5x5 なので、少し余裕を持って 6x6 を基準にする
-    const pieceBlockSize = Math.floor(canvasWidth / maxDimension); // 120 / 6 = 20 (元のサイズと一致)
+    const canvasWidth = holdCanvas.width; 
+    const canvasHeight = holdCanvas.height; 
+    const maxDimension = 6; 
+    const pieceBlockSize = Math.floor(canvasWidth / maxDimension); 
 
     holdCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -252,7 +252,7 @@ function spawnPiece() {
     currentPiece = {
         shape: nextPiece.shape,
         color: nextPiece.color,
-        // x座標は新しいshapeの幅に基づいて設定
+        // x and y は spawnPiece で設定
         x: Math.floor(COLS / 2) - Math.floor(nextPiece.shape[0].length / 2),
         y: 0 
     };
@@ -481,9 +481,9 @@ document.addEventListener('keyup', (e) => {
 });
 
 
-// ==================== 🌟 追加: モバイルボタン操作 ====================
+// ==================== 🌟 モバイルボタン操作 ====================
 
-// ボタンの取得
+// ボタンの取得 (DOM要素が存在しない場合があるため、nullチェックは後続ロジックで行う)
 const btnLeft = document.getElementById('btn-left');
 const btnRight = document.getElementById('btn-right');
 const btnDown = document.getElementById('btn-down');
@@ -559,3 +559,44 @@ if (btnDown) {
     btnDown.addEventListener('touchend', stopSoftDrop);
     btnDown.addEventListener('touchcancel', stopSoftDrop); // タッチがキャンセルされた場合も停止
 }
+
+// ==================== 🌟 追加: タッチ操作によるズーム・スクロール防止 ====================
+
+function preventTouchDefaults(element) {
+    if (element) {
+        // 1. タップ時のデフォルト動作（スクロール、ズーム）を防止
+        // { passive: false } を指定して e.preventDefault() が機能するようにする
+        element.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+        
+        // 2. タッチムーブ時のデフォルト動作（スクロール）を防止
+        element.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
+    }
+}
+
+// ゲームボード全体を防止対象にする
+preventTouchDefaults(document.getElementById('tetris-canvas'));
+
+// モバイル操作ボタン全てを防止対象にする
+const mobileControlsDiv = document.querySelector('.mobile-controls');
+if (mobileControlsDiv) {
+    // ボタンコンテナ自体に適用（ボタン間のスペースでのスクロール防止）
+    preventTouchDefaults(mobileControlsDiv); 
+
+    // 個別ボタンにも適用
+    preventTouchDefaults(btnLeft);
+    preventTouchDefaults(btnRight);
+    preventTouchDefaults(btnDown);
+    preventTouchDefaults(btnRotate);
+    preventTouchDefaults(btnHarddrop);
+    preventTouchDefaults(btnHold);
+}
+
+// その他の要素も必要に応じて追加（例: ホールド/ネクストキャンバス）
+preventTouchDefaults(document.getElementById('hold-piece-canvas'));
+preventTouchDefaults(document.getElementById('next-piece-canvas'));
+
+// =====================================================================
