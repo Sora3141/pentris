@@ -7,49 +7,46 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="game-container"> 
-        <canvas id="tetris-canvas" width="240" height="440"></canvas>
-        <div class="info">
-            <h2>JS Pentomino</h2>
-            <p>Score: <span id="score">0</span></p>
+    <div class="main-layout-container">
+        
+        <div class="left-panel side-panel">
+            <h2>PENT!</h2>
             
-            <div class="side-panel-content">
-                <div class="side-info-container">
-                    <div class="hold-slot">
-                        <p>Hold:</p>
-                        <canvas id="hold-piece-canvas" width="120" height="120"></canvas>
-                    </div>
-                    
-                    <div class="next-slot">
-                        <p>Next:</p>
-                        <canvas id="next-piece-canvas" width="80" height="80"></canvas>
-                    </div>
-                </div>
-                <button onclick="startGame()">Start Game</button>
+            <div class="hold-slot">
+                <p>Hold:</p>
+                <canvas id="hold-piece-canvas" width="120" height="120"></canvas>
             </div>
             
+            <div class="score-status">
+                <p><span id="score">0</span></p> 
+            </div>
+
             <p class="controls">
                 **操作方法:**<br>
                 ← →: 移動<br>
-                ↓: ソフトドロップ (加速落下)<br>
-                Space: ハードドロップ (即時落下)<br>
-                ↑ or Z: 回転<br>
+                ↓: ソフトドロップ<br>
+                Space: ハードドロップ<br>
+                ↑ / X: 回転 (時計回り)<br>
+                Z: 回転 (反時計回り)<br>
                 C: ホールド
             </p>
         </div>
-    </div>
+        
+        <canvas id="tetris-canvas" width="240" height="440"></canvas>
+        
+        <div class="right-panel side-panel">
+            <h3>Next:</h3>
+            <div class="next-pieces-container">
+                <canvas class="next-canvas" id="next-piece-canvas-0" width="60" height="60"></canvas>
+                <canvas class="next-canvas" id="next-piece-canvas-1" width="60" height="60"></canvas>
+                <canvas class="next-canvas" id="next-piece-canvas-2" width="60" height="60"></canvas>
+                <canvas class="next-canvas" id="next-piece-canvas-3" width="60" height="60"></canvas>
+                <canvas class="next-canvas" id="next-piece-canvas-4" width="60" height="60"></canvas>
+            </div>
+            
+            <button onclick="startGame()">Start Game</button>
+        </div>
 
-    <div class="mobile-controls">
-        <div class="movement-row">
-            <button id="btn-hold">C (ホールド)</button>
-            <button id="btn-rotate">↑ (回転)</button>
-            <button id="btn-harddrop">Space (HD)</button>
-        </div>
-        <div class="movement-row">
-            <button id="btn-left">←</button>
-            <button id="btn-down">↓</button>
-            <button id="btn-right">→</button>
-        </div>
     </div>
     
     <script src="tetris.js"></script>

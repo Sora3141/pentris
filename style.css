@@ -1,6 +1,5 @@
-/* 🌟 touch-action: manipulation; は維持し、ダブルタップズームを抑制 */
 html, body {
-    touch-action: manipulation;
+    /* touch-action: manipulation; を削除 */
     -webkit-overflow-scrolling: none; 
     overscroll-behavior: none; 
     height: 100%;
@@ -8,16 +7,16 @@ html, body {
 }
 
 body {
-    /* 中央に配置に戻す */
     display: flex;
     justify-content: center;
     align-items: center; 
     min-height: 100vh;
     margin: 0; 
     background-color: #333;
-    font-family: 'Arial', sans-serif;
+    /* 🌟 修正: フォントをゲーム/デジタル風に変更 */
+    font-family: 'Consolas', 'Courier New', monospace; 
     color: #fff;
-    padding: 20px 0; /* 🌟 修正: PC/モバイル共通の上部余白を戻す */
+    padding: 20px 0;
     flex-direction: column; 
     box-sizing: border-box; 
     
@@ -25,18 +24,47 @@ body {
     overflow-x: hidden;
 }
 
-.game-container {
+/* 🌟 修正: メインレイアウトコンテナ (中央ボードと左右パネル) */
+.main-layout-container {
     display: flex;
-    gap: 30px;
+    gap: 30px; /* ボードとパネルの間隔 */
     border: 5px solid #1a1a1a;
     background-color: #444;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    flex-direction: row; /* PCのデフォルト: 横並び */
-    max-width: 100%; 
-    margin: 0; 
+    align-items: flex-start; /* 上端揃え */
 }
+
+/* 左右パネルの共通スタイル */
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    width: 150px; /* パネルの固定幅 */
+    gap: 15px;
+}
+
+/* 🌟 修正: H2, H3, スコアに立体感とネオン効果を追加 */
+.left-panel h2, .right-panel h3 {
+    margin: 0;
+    color: #fff; /* ベースカラーを白に統一 */
+    /* 立体感・ネオン効果 */
+    text-shadow: 
+        0 0 5px #00f0f0, /* ネオンの光 */
+        0 0 10px #00f0f0,
+        2px 2px 2px #000; /* 影による立体感 */
+}
+
+.left-panel {
+    align-items: center; /* HOLDを中央に寄せる */
+    padding-bottom: 20px;
+}
+.right-panel {
+    align-items: center;
+}
+
 
 /* ゲームボードの枠 */
 #tetris-canvas {
@@ -46,35 +74,10 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
 }
 
-.info {
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
 
-.info h2 {
-    margin-top: 0;
-    color: #00f0f0;
-}
-
-/* Hold, Next, Startボタンを縦に並べるコンテナ (PC表示用) */
-.side-panel-content {
-    display: flex;
-    flex-direction: column; 
-    gap: 10px;
-}
-
-.side-info-container {
-    display: flex;
-    gap: 10px; /* ホールドとネクストの間隔 */
-    margin-bottom: 5px;
-}
-
-.hold-slot, .next-slot {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
+/* Hold スロット */
+.hold-slot {
+    text-align: center;
 }
 
 #hold-piece-canvas {
@@ -85,12 +88,30 @@ body {
     height: 120px;
 }
 
-#next-piece-canvas {
+/* 🌟 修正: NEXTピースコンテナ (5つを縦に) */
+.next-pieces-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* Nextピース間の間隔 */
+    align-items: center;
+}
+
+/* 🌟 修正: 複数の NEXT ピースのサイズ */
+.next-canvas {
     border: 1px solid #777; 
     background-color: #222;
-    margin-bottom: 0; 
-    width: 80px; 
-    height: 80px; 
+    width: 60px; 
+    height: 60px; 
+}
+
+
+/* スコア/レベル表示 */
+.score-status p {
+    margin: 0;
+    font-size: 1.3em; /* 🌟 修正 */
+    font-weight: bold;
+    color: #FFD700; /* 🌟 修正: ゴールドっぽい色 */
+    text-shadow: 1px 1px 0 #000; /* 🌟 修正 */
 }
 
 button {
@@ -109,151 +130,20 @@ button:hover {
     background-color: #00cccc;
 }
 
-/* PC向けのデフォルト設定: 操作説明を表示 */
+/* PC向けの操作説明 */
 .controls {
     margin-top: 20px;
     padding: 10px;
     border: 1px dashed #777;
     border-radius: 5px;
-    font-size: 0.9em;
-    display: block; /* PCでは表示 */
+    font-size: 0.7em; 
+    display: block;
+    width: 130px;
+    color: #ccc; /* 🌟 修正 */
+    text-shadow: 1px 1px 0 #000; /* 🌟 修正 */
 }
 
-/* PC向けのデフォルト設定: モバイルボタンを非表示 */
+/* モバイルボタンは引き続き非表示 */
 .mobile-controls {
     display: none; 
-}
-
-/* モバイルコントロールの基本スタイル */
-.mobile-controls {
-    flex-direction: column;
-    gap: 10px;
-    margin: 0; 
-}
-
-.mobile-controls .movement-row {
-    display: flex;
-    justify-content: space-around;
-    gap: 10px;
-}
-
-.mobile-controls button {
-    font-weight: bold;
-    background-color: #00f0f0;
-    color: #111;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    flex-grow: 1; 
-    min-width: 0; 
-}
-
-#btn-down {
-    background-color: #ffaa00;
-}
-
-.mobile-controls button:active {
-    transform: scale(0.95);
-    background-color: #00cccc;
-}
-
-
-/* ========================================================================= */
-/* 🌟 スマートフォン向けのメディアクエリ (画面幅 600px 以下) */
-/* ========================================================================= */
-@media (max-width: 600px) {
-    
-    body {
-        /* 🌟 修正: 上下のパディングを削除し、コンテンツを中央に再配置 */
-        padding: 0; 
-        justify-content: center; /* 中央配置に戻す */
-        align-items: center; 
-        
-        max-width: 100vw; 
-    }
-
-    .game-container {
-        /* 🌟 修正: 上マージンを削除し、コンテンツを中央に配置 */
-        margin-top: 0; 
-        margin-left: auto;
-        margin-right: auto;
-        
-        width: 307px; 
-        flex-direction: row; 
-        gap: 5px; 
-        padding: 5px; 
-        border: none; 
-        box-shadow: none; 
-        background-color: #333; 
-        border-radius: 0;
-    }
-    
-    /* 🌟 メインキャンバスを縮小 */
-    #tetris-canvas {
-        transform: scale(0.8); 
-        transform-origin: top left; 
-        width: 192px; 
-        height: 352px; 
-        border: none;
-        box-shadow: none;
-    }
-
-    .info {
-        width: 100px; 
-        min-width: 100px;
-        align-items: flex-start; 
-        text-align: left;
-        gap: 5px; 
-    }
-    
-    .info h2 {
-        font-size: 1.2em;
-        margin-top: 5px;
-    }
-    
-    .info p {
-        font-size: 0.8em;
-    }
-    
-    /* Hold と Next を密接に配置 */
-    .side-info-container {
-        justify-content: flex-start;
-        gap: 5px; 
-    }
-
-    /* Hold/Next のキャンバスサイズを大幅に縮小 */
-    #hold-piece-canvas, #next-piece-canvas {
-        width: 50px; 
-        height: 50px;
-    }
-
-    .hold-slot p, .next-slot p {
-        font-size: 0.7em;
-        margin: 0;
-    }
-    
-    .side-panel-content button {
-        padding: 5px;
-        font-size: 0.8em;
-    }
-
-    /* PC操作説明を非表示 */
-    .controls {
-        display: none; 
-    }
-
-    /* 🌟 モバイルボタンを表示し、ゲームコンテナと同じ幅にする */
-    .mobile-controls {
-        display: flex; 
-        width: 307px; 
-        margin: 10px auto; 
-        padding: 0 5px; 
-        box-sizing: border-box;
-    }
-
-    .mobile-controls button {
-        padding: 8px;
-        font-size: 1em; 
-    }
 }
