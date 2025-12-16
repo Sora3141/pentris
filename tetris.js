@@ -1,7 +1,8 @@
 // ==================== ゲーム設定 ====================
 const COLS = 12; // 12列
 const ROWS = 24; // 24行
-const BLOCK_SIZE = 30; // サイズ変更済み
+// 🌟 修正: ブロックサイズを1.5倍に拡大 (20 -> 30)
+const BLOCK_SIZE = 30; 
 // 🌟 修正: NEXT表示数を5に設定
 const NEXT_COUNT = 5;
 
@@ -17,7 +18,8 @@ const holdCtx = holdCanvas ? holdCanvas.getContext('2d') : null;
 // 🌟 修正: NEXT用キャンバスをクラス名で複数取得
 const nextCanvases = Array.from(document.querySelectorAll('.next-canvas'));
 const nextContexts = nextCanvases.map(c => c.getContext('2d'));
-const NEXT_CANVAS_SIZE = 90; // サイズ変更済み
+// 🌟 修正: NEXTキャンバスサイズを1.5倍に拡大 (60 -> 90)
+const NEXT_CANVAS_SIZE = 90; 
 
 // Canvas内部解像度の設定
 if (canvas) {
@@ -25,8 +27,9 @@ if (canvas) {
     canvas.height = ROWS * BLOCK_SIZE;
 }
 if (holdCanvas) {
-    holdCanvas.width = 180; // サイズ変更済み
-    holdCanvas.height = 180; // サイズ変更済み
+    // 🌟 修正: HOLDキャンバス内部解像度を1.5倍に拡大 (120 -> 180)
+    holdCanvas.width = 180;
+    holdCanvas.height = 180;
 }
 // 🌟 修正: 複数のNext Canvasの解像度を設定
 nextCanvases.forEach(c => {
@@ -53,11 +56,6 @@ let currentDropInterval = defaultDropInterval;
 const SOFT_DROP_MULTIPLIER = 10; 
 
 let currentRotation = 0; 
-
-// 🌟 追加: ピース選択バッグのための変数 (ハイブリッドランダマイザ用)
-let pieceBag = []; 
-let lastPieceTime = Array(18).fill(0); // PIECES.length=18
-let totalPiecesSpawned = 0;
 
 // ==================== ペントミノ定義 (18種) ====================
 const PIECES = [
@@ -102,15 +100,6 @@ const KICK_TABLE = [
 ];
 
 // ==================== ユーティリティ ====================
-// 🌟 追加: 配列をシャッフルする関数
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
-
 function rotateMatrix(matrix) {
     return matrix[0].map((_, c) => matrix.map(r => r[c]).reverse());
 }
@@ -136,6 +125,15 @@ function getPieceSize(shape) {
         width = Math.max(width, row.length);
     }
     return { width, height };
+}
+
+function getNewRotatedPiece() {
+    const index = Math.floor(Math.random() * PIECES.length);
+    const piece = PIECES[index];
+    return { 
+        shape: piece.shape.map(row => [...row]), 
+        color: piece.color,
+    };
 }
 
 function getDropY() {
@@ -243,6 +241,7 @@ function drawNextQueue() {
             
             // 枠内に収めるためのブロックサイズ計算 (最大5x5)
             const maxDim = 5; 
+            // 🌟 修正: blockSizeの計算をNEXT_CANVAS_SIZE(90)に合わせて調整
             const blockSize = Math.floor((w - 4) / maxDim); 
 
             const pW = shape[0].length;
@@ -277,6 +276,7 @@ function drawHoldPiece() {
 
     if (holdPiece) {
         const maxDim = 5;
+        // 🌟 修正: blockSizeの計算をHOLDキャンバスサイズ(180)に合わせて調整
         const blockSize = Math.floor((w - 10) / maxDim);
         let shape = holdPiece.shape; // デフォルト形状
         
@@ -333,50 +333,7 @@ function checkCollision(dx, dy, newShape = currentPiece.shape, currentX = curren
 function fillNextQueue() {
     // 🌟 修正: Next QueueのサイズをNEXT_COUNT(5)に設定
     while (nextQueue.length < NEXT_COUNT) { 
-        
-        // 🌟 修正: バッグがピース種類数 (18個) 未満になったら種類数 x 2 (36個) をシャッフルして補充
-        if (pieceBag.length < PIECES.length) { 
-            const newBag = [];
-            for (let i = 0; i < 3; i++) {
-                newBag.push(...Array.from({ length: PIECES.length }, (_, i) => i));
-            }
-            pieceBag = shuffleArray(newBag);
-        }
-        
-        // --- 🌟 ハイブリッド式: 干ばつ補正ロジック ---
-        
-        // 1. 最も干ばつしているピース（最も長く出ていないピース）を特定する
-        let minTime = Infinity;
-        let mostDroughtPieceIndex = -1;
-        
-        for (let i = 0; i < PIECES.length; i++) {
-            if (lastPieceTime[i] < minTime) {
-                minTime = lastPieceTime[i];
-                mostDroughtPieceIndex = i;
-            }
-        }
-
-        // 2. 最も干ばつしているピース (mostDroughtPieceIndex) をバッグの先頭に追加
-        if (mostDroughtPieceIndex !== -1) {
-            // バッグの先頭に干ばつピースを挿入
-            pieceBag.unshift(mostDroughtPieceIndex);
-        }
-        
-        // --- 🌟 ドローと履歴更新 ---
-        
-        // バッグの先頭からインデックスを取り出す
-        const pieceIndex = pieceBag.shift();
-        const piece = PIECES[pieceIndex];
-        
-        // 履歴を更新
-        totalPiecesSpawned++;
-        lastPieceTime[pieceIndex] = totalPiecesSpawned;
-        
-        // ピースをnextQueueに追加
-        nextQueue.push({
-            shape: piece.shape.map(row => [...row]),
-            color: piece.color,
-        });
+        nextQueue.push(getNewRotatedPiece());
     }
 }
 
@@ -642,11 +599,8 @@ function initBoard() {
     
     if (scoreElement) scoreElement.textContent = `Score: 0 (Lv.1)`;
     
-    // 🌟 修正: Next Queueとピースバッグ、履歴を初期化
+    // 🌟 修正: Next Queueを5つ分確保
     nextQueue = [];
-    pieceBag = []; 
-    lastPieceTime = Array(PIECES.length).fill(0); 
-    totalPiecesSpawned = 0; 
     holdPiece = null;
     canHold = true; 
     
