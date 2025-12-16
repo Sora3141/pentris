@@ -582,6 +582,9 @@ function resetGameLoop(interval) {
 }
 
 function startGame() {
+    // 🌟 修正: ゲームが既に始まっている場合は無視
+    if (gameLoop !== null) return;
+
     initBoard();
 }
 
@@ -612,6 +615,12 @@ function initBoard() {
 // ==================== 入力イベント ====================
 
 document.addEventListener('keydown', (e) => {
+    // 🌟 追加: currentPieceがnull (ゲーム開始前またはゲームオーバー後) の場合、Enterでスタート
+    if (currentPiece === null && e.key === 'Enter') {
+        startGame();
+        return;
+    }
+
     if (!currentPiece) return;
 
     switch (e.key) {

@@ -142,7 +142,7 @@ button:hover {
     padding: 10px;
     border: 1px dashed #777;
     border-radius: 5px;
-    font-size: 0.7em; 
+    font-size: 0.8em; 
     display: block;
     /* 🌟 修正: 幅も1.5倍に調整 (130px -> 195px) */
     width: 195px;
