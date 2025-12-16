@@ -139,7 +139,7 @@ button:hover {
     font-size: 0.7em; 
     display: block;
     width: 130px;
-    color: #ccc; /* 🌟 修正 */
+    color: #ccc;
     text-shadow: 1px 1px 0 #000; /* 🌟 修正 */
 }
 
