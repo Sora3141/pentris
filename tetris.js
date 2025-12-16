@@ -337,7 +337,7 @@ function fillNextQueue() {
         // 🌟 修正: バッグがピース種類数 (18個) 未満になったら種類数 x 2 (36個) をシャッフルして補充
         if (pieceBag.length < PIECES.length) { 
             const newBag = [];
-            for (let i = 0; i < 2; i++) {
+            for (let i = 0; i < 3; i++) {
                 newBag.push(...Array.from({ length: PIECES.length }, (_, i) => i));
             }
             pieceBag = shuffleArray(newBag);
