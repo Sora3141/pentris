@@ -1,7 +1,8 @@
 // ==================== ゲーム設定 ====================
 const COLS = 12; // 12列
 const ROWS = 24; // 24行
-const BLOCK_SIZE = 20; 
+// 🌟 修正: ブロックサイズを1.5倍に拡大 (20 -> 30)
+const BLOCK_SIZE = 30; 
 // 🌟 修正: NEXT表示数を5に設定
 const NEXT_COUNT = 5;
 
@@ -17,7 +18,8 @@ const holdCtx = holdCanvas ? holdCanvas.getContext('2d') : null;
 // 🌟 修正: NEXT用キャンバスをクラス名で複数取得
 const nextCanvases = Array.from(document.querySelectorAll('.next-canvas'));
 const nextContexts = nextCanvases.map(c => c.getContext('2d'));
-const NEXT_CANVAS_SIZE = 60; // 新しいCSSサイズに合わせる
+// 🌟 修正: NEXTキャンバスサイズを1.5倍に拡大 (60 -> 90)
+const NEXT_CANVAS_SIZE = 90; 
 
 // Canvas内部解像度の設定
 if (canvas) {
@@ -25,8 +27,9 @@ if (canvas) {
     canvas.height = ROWS * BLOCK_SIZE;
 }
 if (holdCanvas) {
-    holdCanvas.width = 120;
-    holdCanvas.height = 120;
+    // 🌟 修正: HOLDキャンバス内部解像度を1.5倍に拡大 (120 -> 180)
+    holdCanvas.width = 180;
+    holdCanvas.height = 180;
 }
 // 🌟 修正: 複数のNext Canvasの解像度を設定
 nextCanvases.forEach(c => {
@@ -238,6 +241,7 @@ function drawNextQueue() {
             
             // 枠内に収めるためのブロックサイズ計算 (最大5x5)
             const maxDim = 5; 
+            // 🌟 修正: blockSizeの計算をNEXT_CANVAS_SIZE(90)に合わせて調整
             const blockSize = Math.floor((w - 4) / maxDim); 
 
             const pW = shape[0].length;
@@ -266,12 +270,13 @@ function drawNextQueue() {
 
 function drawHoldPiece() {
     if (!holdCtx || !holdCanvas) return;
-    const w = holdCanvas.width;
-    const h = holdCanvas.height;
+    const w = holdCanvas.width; // 180
+    const h = holdCanvas.height; // 180
     holdCtx.clearRect(0, 0, w, h);
 
     if (holdPiece) {
         const maxDim = 5;
+        // 🌟 修正: blockSizeの計算をHOLDキャンバスサイズ(180)に合わせて調整
         const blockSize = Math.floor((w - 10) / maxDim);
         let shape = holdPiece.shape; // デフォルト形状
         

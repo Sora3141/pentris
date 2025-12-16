@@ -42,7 +42,8 @@ body {
     flex-direction: column;
     align-items: flex-start;
     padding: 0;
-    width: 150px; /* パネルの固定幅 */
+    /* 🌟 修正: パネルの固定幅を1.5倍に拡大 (150px -> 225px) */
+    width: 225px; 
     gap: 15px;
 }
 
@@ -72,6 +73,8 @@ body {
     background-color: #111;
     display: block; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    /* 🌟 修正: heightを新しいブロックサイズ(30)に合わせて固定 (24行*30px = 720px) */
+    height: 720px;
 }
 
 
@@ -84,8 +87,9 @@ body {
     border: 1px solid #777; 
     background-color: #222;
     margin-bottom: 0; 
-    width: 120px; 
-    height: 120px;
+    /* 🌟 修正: HOLDキャンバスCSSサイズを1.5倍に拡大 (120px -> 180px) */
+    width: 180px; 
+    height: 180px;
 }
 
 /* 🌟 修正: NEXTピースコンテナ (5つを縦に) */
@@ -100,15 +104,17 @@ body {
 .next-canvas {
     border: 1px solid #777; 
     background-color: #222;
-    width: 60px; 
-    height: 60px; 
+    /* 🌟 修正: NEXTキャンバスCSSサイズを1.5倍に拡大 (60px -> 90px) */
+    width: 90px; 
+    height: 90px; 
 }
 
 
 /* スコア/レベル表示 */
 .score-status p {
     margin: 0;
-    font-size: 1.3em; /* 🌟 修正 */
+    /* 🌟 修正: フォントサイズも微調整 (1.3em -> 1.8em) */
+    font-size: 1.8em; 
     font-weight: bold;
     color: #FFD700; /* 🌟 修正: ゴールドっぽい色 */
     text-shadow: 1px 1px 0 #000; /* 🌟 修正 */
@@ -138,7 +144,8 @@ button:hover {
     border-radius: 5px;
     font-size: 0.7em; 
     display: block;
-    width: 130px;
+    /* 🌟 修正: 幅も1.5倍に調整 (130px -> 195px) */
+    width: 195px;
     color: #ccc;
     text-shadow: 1px 1px 0 #000; /* 🌟 修正 */
 }
