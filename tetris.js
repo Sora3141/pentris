@@ -1,3 +1,6 @@
+// ==================== バージョン管理 ===================
+const VERSION = "v1.3.0"; // 🌟 ここを書き換えるだけで表示が更新されます
+
 // ==================== ゲーム設定 ===================
 const COLS = 12; 
 const ROWS = 24; 
@@ -7,8 +10,11 @@ const NEXT_COUNT = 5;
 const canvas = document.getElementById('tetris-canvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
-// 🌟 REN表示用の要素（後でHTMLに追加するか、動的に制御します）
 let renElement = document.getElementById('ren-display');
+
+// バージョン表示の反映
+const versionDiv = document.getElementById('version-display');
+if (versionDiv) versionDiv.innerText = VERSION;
 
 const holdCanvas = document.getElementById('hold-piece-canvas');
 const holdCtx = holdCanvas ? holdCanvas.getContext('2d') : null;
@@ -34,7 +40,7 @@ nextCanvases.forEach(c => {
 let score = 0;
 let level = 1;
 let linesClearedTotal = 0;
-let renCount = -1; // 🌟 REN用
+let renCount = -1; // 🌟 REN用 (-1: 準備, 0: 1回目, 1: 1REN...)
 let board = [];
 
 let currentPiece = null;
@@ -52,7 +58,7 @@ let currentRotation = 0;
 const PIECES = [
     { shape: [[0,1,1],[1,1,0],[0,1,0]], color: '#FF5733' }, // F
     { shape: [[1,1,0],[0,1,1],[0,1,0]], color: '#FF8D6A' }, // F'
-    { shape: [[1],[1],[1],[1],[1]], color: '#00BFFF' },    // I
+    { shape: [[1,1,1,1,1]], color: '#00BFFF' },            // I (5x1)
     { shape: [[1,0],[1,0],[1,0],[1,1]], color: '#1E90FF' }, // L
     { shape: [[0,1],[0,1],[0,1],[1,1]], color: '#4682B4' }, // L'
     { shape: [[1,1],[1,1],[1,0]], color: '#FFD700' },       // P
@@ -68,7 +74,7 @@ const PIECES = [
             [0, 0, 1, 0, 0]
         ], 
         color: '#800080' 
-    }, // T (5x5)
+    }, // T (5x5 中心軸回転)
     { shape: [[1,0,1],[1,1,1],[0,0,0]], color: '#3CB371' }, // U
     { shape: [[1,0,0],[1,0,0],[1,1,1]], color: '#4169E1' }, // V
     { shape: [[1,0,0],[1,1,0],[0,1,1]], color: '#DA70D6' }, // W
@@ -126,7 +132,6 @@ function getDropY() {
     return y;
 }
 
-// 🌟 全消し判定
 function isAllClear() {
     return board.every(row => row.every(cell => cell === 0));
 }
@@ -136,7 +141,6 @@ function renderScore() {
     if (scoreElement) {
         scoreElement.innerText = `${score} (Lv.${level})`;
     }
-    // 🌟 REN表示の更新
     if (renElement) {
         if (renCount > 0) {
             renElement.innerText = `${renCount} REN!`;
@@ -346,28 +350,26 @@ function checkLines() {
             linesCleared++; r++; 
         }
     }
-    // 🌟 RENと全消しの判定
     if (linesCleared > 0) {
-        renCount++;
+        renCount++; // 2連続消去で 1 REN
         const allClearBonus = isAllClear();
         updateScore(linesCleared, renCount, allClearBonus);
     } else {
-        renCount = -1; // 途切れたら-1に戻す
-        renderScore(); // REN表示を消すため
+        renCount = -1;
+        renderScore();
     }
 }
 
 function updateScore(lines, ren, allClear) {
-    // 🌟 ペントミノ版スコア配分
     const basePoints = [0, 100, 300, 700, 1500, 5000]; 
     let points = (basePoints[lines] || 100) * level;
 
-    // 🌟 RENボーナス (50定数)
+    // RENボーナス (50 * REN * Level)
     if (ren > 0) {
         points += (50 * ren * level);
     }
 
-    // 🌟 全消しボーナス (3000定数)
+    // 全消しボーナス (3000 * Level)
     if (allClear) {
         points += (3000 * level);
     }
@@ -491,20 +493,5 @@ document.addEventListener('keyup', (e) => {
         resetGameLoop(currentDropInterval);
     }
 });
-
-// 🌟 動的にREN表示用のDIVを作成
-if (!document.getElementById('ren-display')) {
-    const renDiv = document.createElement('div');
-    renDiv.id = 'ren-display';
-    renDiv.style.color = '#00f0f0';
-    renDiv.style.fontSize = '1.5em';
-    renDiv.style.fontWeight = 'bold';
-    renDiv.style.textAlign = 'center';
-    renDiv.style.transition = 'opacity 0.2s';
-    renDiv.style.height = '1.6em';
-    const scoreStatus = document.querySelector('.score-status');
-    if (scoreStatus) scoreStatus.prepend(renDiv);
-    renElement = renDiv;
-}
 
 initBoard();

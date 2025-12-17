@@ -8,20 +8,16 @@
 </head>
 <body>
     <div class="main-layout-container">
-        
         <div class="left-panel side-panel">
             <h2>PENT!</h2>
-            
             <div class="hold-slot">
                 <h2>HOLD</h2>
                 <canvas id="hold-piece-canvas" width="180" height="180"></canvas>
             </div>
-            
             <div class="score-status">
                 <div id="ren-display" style="opacity: 0; color: #00f0f0; font-size: 1.5em; font-weight: bold; text-align: center;">0 REN!</div>
                 <p>SCORE: <span id="score">0 (Lv.1)</span></p> 
             </div>
-
             <p class="controls">
                 操作方法<br>
                 ← →: 移動<br>
@@ -33,9 +29,7 @@
                 Enter: スタートゲーム
             </p>
         </div>
-        
         <canvas id="tetris-canvas" width="360" height="720"></canvas>
-        
         <div class="right-panel side-panel">
             <h3>NEXT</h3>
             <div class="next-pieces-container">
@@ -46,9 +40,8 @@
                 <canvas class="next-canvas" id="next-piece-canvas-4" width="90" height="90"></canvas>
             </div>
         </div>
-
     </div>
-    
+    <div id="version-display"></div>
     <script src="./tetris.js"></script>
 </body>
 </html>

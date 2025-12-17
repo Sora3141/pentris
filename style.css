@@ -155,3 +155,19 @@ button:hover {
 .mobile-controls {
     display: none; 
 }
+
+#version-display {
+    position: fixed;
+    bottom: 10px;
+    right: 15px;
+    font-size: 0.8em;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Consolas', monospace;
+    pointer-events: none;
+    z-index: 100;
+}
+
+#ren-display {
+    transition: opacity 0.2s;
+    height: 1.6em; /* スペース確保 */
+}
