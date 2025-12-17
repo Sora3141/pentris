@@ -7,6 +7,8 @@ const NEXT_COUNT = 5;
 const canvas = document.getElementById('tetris-canvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('score');
+// 🌟 REN表示用の要素（後でHTMLに追加するか、動的に制御します）
+let renElement = document.getElementById('ren-display');
 
 const holdCanvas = document.getElementById('hold-piece-canvas');
 const holdCtx = holdCanvas ? holdCanvas.getContext('2d') : null;
@@ -32,7 +34,7 @@ nextCanvases.forEach(c => {
 let score = 0;
 let level = 1;
 let linesClearedTotal = 0;
-let combo = -1; 
+let renCount = -1; // 🌟 REN用
 let board = [];
 
 let currentPiece = null;
@@ -124,10 +126,24 @@ function getDropY() {
     return y;
 }
 
+// 🌟 全消し判定
+function isAllClear() {
+    return board.every(row => row.every(cell => cell === 0));
+}
+
 // ==================== 描画関数 ====================
 function renderScore() {
     if (scoreElement) {
         scoreElement.innerText = `${score} (Lv.${level})`;
+    }
+    // 🌟 REN表示の更新
+    if (renElement) {
+        if (renCount > 0) {
+            renElement.innerText = `${renCount} REN!`;
+            renElement.style.opacity = "1";
+        } else {
+            renElement.style.opacity = "0";
+        }
     }
 }
 
@@ -330,14 +346,32 @@ function checkLines() {
             linesCleared++; r++; 
         }
     }
-    if (linesCleared > 0) updateScore(linesCleared); else combo = -1;
+    // 🌟 RENと全消しの判定
+    if (linesCleared > 0) {
+        renCount++;
+        const allClearBonus = isAllClear();
+        updateScore(linesCleared, renCount, allClearBonus);
+    } else {
+        renCount = -1; // 途切れたら-1に戻す
+        renderScore(); // REN表示を消すため
+    }
 }
 
-function updateScore(lines) {
-    combo++;
-    const basePoints = [0, 100, 300, 700, 1500, 4000]; 
+function updateScore(lines, ren, allClear) {
+    // 🌟 ペントミノ版スコア配分
+    const basePoints = [0, 100, 300, 700, 1500, 5000]; 
     let points = (basePoints[lines] || 100) * level;
-    if (combo > 0) points += (50 * combo * level);
+
+    // 🌟 RENボーナス (50定数)
+    if (ren > 0) {
+        points += (50 * ren * level);
+    }
+
+    // 🌟 全消しボーナス (3000定数)
+    if (allClear) {
+        points += (3000 * level);
+    }
+
     score += points;
     linesClearedTotal += lines;
     if (Math.floor(linesClearedTotal / 10) >= level) {
@@ -416,7 +450,7 @@ function resetGameLoop(interval) {
 function initBoard() {
     if (gameLoop) { clearInterval(gameLoop); gameLoop = null; }
     board = Array.from({ length: ROWS }, () => Array(COLS).fill(0));
-    score = 0; level = 1; combo = -1; linesClearedTotal = 0;
+    score = 0; level = 1; renCount = -1; linesClearedTotal = 0;
     defaultDropInterval = 800; currentDropInterval = defaultDropInterval;
     currentPiece = null; nextQueue = []; holdPiece = null; canHold = true; 
     renderScore();
@@ -457,5 +491,20 @@ document.addEventListener('keyup', (e) => {
         resetGameLoop(currentDropInterval);
     }
 });
+
+// 🌟 動的にREN表示用のDIVを作成
+if (!document.getElementById('ren-display')) {
+    const renDiv = document.createElement('div');
+    renDiv.id = 'ren-display';
+    renDiv.style.color = '#00f0f0';
+    renDiv.style.fontSize = '1.5em';
+    renDiv.style.fontWeight = 'bold';
+    renDiv.style.textAlign = 'center';
+    renDiv.style.transition = 'opacity 0.2s';
+    renDiv.style.height = '1.6em';
+    const scoreStatus = document.querySelector('.score-status');
+    if (scoreStatus) scoreStatus.prepend(renDiv);
+    renElement = renDiv;
+}
 
 initBoard();
