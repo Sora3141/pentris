@@ -64,6 +64,7 @@ body {
 }
 .right-panel {
     align-items: center;
+    justify-content: flex-start; /* 上側に寄せる */
 }
 
 
