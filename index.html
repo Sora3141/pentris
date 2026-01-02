@@ -3,45 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PENT!</title>
+    <title>PENT! - 究極のブロックパズル</title>
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div class="main-layout-container">
-        <div class="left-panel side-panel">
-            <h2>PENT!</h2>
-            <div class="hold-slot">
-                <h2>HOLD</h2>
-                <canvas id="hold-piece-canvas" width="180" height="180"></canvas>
-            </div>
-            <div class="score-status">
-                <div id="ren-display" style="opacity: 0; color: #00f0f0; font-size: 1.5em; font-weight: bold; text-align: center;">0 REN!</div>
-                <p>SCORE: <span id="score">0 (Lv.1)</span></p> 
-            </div>
-            <p class="controls">
-                操作方法<br>
-                ← →: 移動<br>
-                ↓: ソフトドロップ<br>
-                Space: ハードドロップ<br>
-                ↑ / X: 回転 (時計回り)<br>
-                Z: 回転 (反時計回り)<br>
-                C: ホールド<br>
-                Enter: スタート<br>
-                esc: リセット
-            </p>
+    <div class="page-wrapper">
+        
+        <div class="ad-outer-side">
+            <div class="ad-label">ADVERTISEMENT</div>
+            <div class="ad-placeholder-rect"><script src="https://adm.shinobi.jp/s/775d740bef2ffd9e775e845669ceee30"></script></div>
+            <div class="ad-placeholder-rect"><script src="https://adm.shinobi.jp/s/ad31de8b40ec102e1ea40ed6646c4f0e"></script></div>
+            <div class="ad-placeholder-rect"><script src="https://adm.shinobi.jp/s/eff279aeebd86a7fb4498b73861da5da"></script></div>
         </div>
-        <canvas id="tetris-canvas" width="360" height="720"></canvas>
-        <div class="right-panel side-panel">
-            <h3>NEXT</h3>
-            <div class="next-pieces-container">
-                <canvas class="next-canvas" id="next-piece-canvas-0" width="90" height="90"></canvas>
-                <canvas class="next-canvas" id="next-piece-canvas-1" width="90" height="90"></canvas>
-                <canvas class="next-canvas" id="next-piece-canvas-2" width="90" height="90"></canvas>
-                <canvas class="next-canvas" id="next-piece-canvas-3" width="90" height="90"></canvas>
-                <canvas class="next-canvas" id="next-piece-canvas-4" width="90" height="90"></canvas>
+
+        <div class="main-layout-container">
+            <div class="left-panel side-panel">
+                <h2>PENT!</h2>
+                <div class="hold-slot">
+                    <h2>HOLD</h2>
+                    <canvas id="hold-piece-canvas" width="168" height="168"></canvas>
+                </div>
+                <div class="score-status">
+                    <div id="ren-display" style="opacity: 0; color: #00f0f0; font-size: 1.3em; font-weight: bold; text-align: center;">0 REN!</div>
+                    <p>SCORE: <span id="score">0 (Lv.1)</span></p> 
+                </div>
+                <p class="controls">
+                    ← →: 移動<br>
+                    ↓: ソフト<br>
+                    Space: ハード<br>
+                    ↑ / X: 回転<br>
+                    Z: 逆回転<br>
+                    C: ホールド<br>
+                    Enter: 開始<br>
+                    esc: リセット
+                </p>
+            </div>
+
+            <div style="position: relative;">
+                <canvas id="tetris-canvas" width="336" height="672"></canvas>
+
+                <div id="game-over-overlay">
+                    <div class="result-card">
+                        <h2>GAME OVER</h2>
+                        <div class="final-score-area">
+                            <p>SCORE: <span id="final-score">0</span></p>
+                            <p>LEVEL: <span id="final-level">1</span></p>
+                        </div>
+                        <div class="ad-section-result">
+                            <div class="ad-label">SPONSORED</div>
+                            <div class="ad-placeholder-result">
+                                <script src="https://adm.shinobi.jp/s/70f20b8436b6578971af6010fd404ef0"></script>
+                            </div>
+                        </div>
+                        <button onclick="retryGame()">RETRY (Enter)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-panel side-panel">
+                <h3>NEXT</h3>
+                <div class="next-pieces-container">
+                    <canvas class="next-canvas" id="next-piece-canvas-0" width="84" height="84"></canvas>
+                    <canvas class="next-canvas" id="next-piece-canvas-1" width="84" height="84"></canvas>
+                    <canvas class="next-canvas" id="next-piece-canvas-2" width="84" height="84"></canvas>
+                    <canvas class="next-canvas" id="next-piece-canvas-3" width="84" height="84"></canvas>
+                    <canvas class="next-canvas" id="next-piece-canvas-4" width="84" height="84"></canvas>
+                </div>
+                <div class="ad-section-side">
+                    <div class="ad-label">ADVERTISEMENT</div>
+                    <div class="ad-placeholder-square"><script src="https://adm.shinobi.jp/s/1a4f5b9526f981cbc1c160f2dcc158bc"></script></div>
+                </div>
             </div>
         </div>
+
+        <div class="ad-outer-side">
+            <div class="ad-label">ADVERTISEMENT</div>
+            <div class="ad-placeholder-rect"><script src="https://adm.shinobi.jp/s/e74ab93b30494da9c35b4d62a8cd7afb"></script></div>
+            <div class="ad-placeholder-rect"><script src="https://adm.shinobi.jp/s/c347d64a04d16a2fd1d5707ac08c5362"></script></div>
+            <div class="ad-placeholder-rect"><script src="https://adm.shinobi.jp/s/1748647703490da9b1e637bdae93ac10"></script></div>
+        </div>
+
     </div>
+
     <div id="version-display"></div>
     <script src="./tetris.js"></script>
 </body>

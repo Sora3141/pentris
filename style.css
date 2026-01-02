@@ -1,5 +1,4 @@
 html, body {
-    /* touch-action: manipulation; を削除 */
     -webkit-overflow-scrolling: none; 
     overscroll-behavior: none; 
     height: 100%;
@@ -13,161 +12,99 @@ body {
     min-height: 100vh;
     margin: 0; 
     background-color: #333;
-    /* 🌟 修正: フォントをゲーム/デジタル風に変更 */
     font-family: 'Consolas', 'Courier New', monospace; 
     color: #fff;
-    padding: 20px 0;
-    flex-direction: column; 
     box-sizing: border-box; 
-    
-    max-width: 100vw; 
-    overflow-x: hidden;
+    max-width: 100vw;
+    overflow-y: auto;
 }
 
-/* 🌟 修正: メインレイアウトコンテナ (中央ボードと左右パネル) */
+.page-wrapper {
+    display: flex;
+    align-items: center; 
+    gap: 35px; 
+    padding: 30px;
+}
+
 .main-layout-container {
     display: flex;
-    gap: 30px; /* ボードとパネルの間隔 */
+    gap: 20px; 
     border: 5px solid #1a1a1a;
     background-color: #444;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    align-items: flex-start; /* 上端揃え */
+    flex-shrink: 0;
 }
 
-/* 左右パネルの共通スタイル */
 .side-panel {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 0;
-    /* 🌟 修正: パネルの固定幅を1.5倍に拡大 (150px -> 225px) */
-    width: 225px; 
-    gap: 15px;
+    gap: 12px;
+    width: 180px;
 }
 
-/* 🌟 修正: H2, H3, スコアに立体感とネオン効果を追加 */
 .left-panel h2, .right-panel h3 {
     margin: 0;
-    color: #fff; /* ベースカラーを白に統一 */
-    /* 立体感・ネオン効果 */
-    text-shadow: 
-        0 0 5px #00f0f0, /* ネオンの光 */
-        0 0 10px #00f0f0,
-        2px 2px 2px #000; /* 影による立体感 */
+    font-size: 1.4em;
+    color: #fff; 
+    text-shadow: 0 0 5px #00f0f0, 2px 2px 2px #000;
 }
 
-.left-panel {
-    align-items: center; /* HOLDを中央に寄せる */
-    padding-bottom: 20px;
-}
-.right-panel {
-    align-items: center;
-    justify-content: flex-start; /* 上側に寄せる */
-}
-
-
-/* ゲームボードの枠 */
 #tetris-canvas {
     border: 3px solid #000;
     background-color: #111;
-    display: block; 
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
-    /* 🌟 修正: heightを新しいブロックサイズ(30)に合わせて固定 (24行*30px = 720px) */
-    height: 720px;
-}
-
-
-/* Hold スロット */
-.hold-slot {
-    text-align: center;
-}
-
-#hold-piece-canvas {
-    border: 1px solid #777; 
-    background-color: #222;
-    margin-bottom: 0; 
-    /* 🌟 修正: HOLDキャンバスCSSサイズを1.5倍に拡大 (120px -> 180px) */
-    width: 180px; 
-    height: 180px;
-}
-
-/* 🌟 修正: NEXTピースコンテナ (5つを縦に) */
-.next-pieces-container {
-    display: flex;
-    flex-direction: column;
-    gap: 5px; /* Nextピース間の間隔 */
-    align-items: center;
-}
-
-/* 🌟 修正: 複数の NEXT ピースのサイズ */
-.next-canvas {
-    border: 1px solid #777; 
-    background-color: #222;
-    /* 🌟 修正: NEXTキャンバスCSSサイズを1.5倍に拡大 (60px -> 90px) */
-    width: 90px; 
-    height: 90px; 
-}
-
-
-/* スコア/レベル表示 */
-.score-status p {
-    margin: 0;
-    /* 🌟 修正: フォントサイズも微調整 (1.3em -> 1.8em) */
-    font-size: 1.8em; 
-    font-weight: bold;
-    color: #FFD700; /* 🌟 修正: ゴールドっぽい色 */
-    text-shadow: 1px 1px 0 #000; /* 🌟 修正 */
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #00f0f0;
-    color: #111;
-    border: none;
-    border-radius: 5px;
-    font-weight: bold;
-    transition: background-color 0.2s;
-}
-
-button:hover {
-    background-color: #00cccc;
-}
-
-/* PC向けの操作説明 */
-.controls {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px dashed #777;
-    border-radius: 5px;
-    font-size: 0.8em; 
     display: block;
-    /* 🌟 修正: 幅も1.5倍に調整 (130px -> 195px) */
-    width: 195px;
-    color: #ccc;
-    text-shadow: 1px 1px 0 #000; /* 🌟 修正 */
+    height: 672px;
 }
 
-/* モバイルボタンは引き続き非表示 */
-.mobile-controls {
-    display: none; 
+/* 🌟 リザルトオーバーレイ */
+#game-over-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    display: none; /* JSでflexに切り替え */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    border-radius: 8px;
 }
 
-#version-display {
-    position: fixed;
-    bottom: 10px;
-    right: 15px;
-    font-size: 0.8em;
-    color: rgba(255, 255, 255, 0.4);
-    font-family: 'Consolas', monospace;
-    pointer-events: none;
-    z-index: 100;
+.result-card {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border: 2px solid #00f0f0;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 240, 240, 0.4);
+    width: 310px;
 }
 
-#ren-display {
-    transition: opacity 0.2s;
-    height: 1.6em; /* スペース確保 */
+.result-card h2 { color: #ff3333; margin: 0 0 15px 0; text-shadow: 0 0 8px #ff3333; }
+.final-score-area p { font-size: 1.4em; color: #FFD700; margin: 5px 0; }
+.ad-section-result { margin: 15px 0; background-color: #111; border-radius: 5px; padding: 5px; }
+.ad-placeholder-result { width: 300px; height: 250px; display: flex; align-items: center; justify-content: center; }
+
+.result-card button {
+    background-color: #00f0f0;
+    color: #000;
+    border: none;
+    padding: 10px 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
 }
+
+/* その他パーツ */
+#hold-piece-canvas { background-color: #222; width: 168px; height: 168px; border: 1px solid #777; }
+.next-canvas { background-color: #222; width: 84px; height: 84px; border: 1px solid #777; }
+.ad-label { font-size: 9px; color: #888; margin-bottom: 5px; text-align: center; }
+.ad-outer-side { display: flex; flex-direction: column; gap: 15px; width: 300px; }
+.ad-placeholder-rect { width: 300px; height: 250px; background-color: #222; border: 1px dashed #555; display: flex; justify-content: center; align-items: center; }
+.score-status p { margin: 8px 0; font-size: 1.3em; color: #FFD700; }
+.controls { font-size: 0.8em; width: 150px; color: #ccc; border: 1px dashed #777; padding: 10px; }
+#version-display { position: fixed; bottom: 10px; right: 15px; font-size: 0.9em; color: #00f0f0; background: rgba(0,0,0,0.6); padding: 3px 10px; border-radius: 4px; z-index: 9999; }

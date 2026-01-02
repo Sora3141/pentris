@@ -1,10 +1,10 @@
 // ==================== バージョン管理 ===================
-const VERSION = "v1.3.0"; // 🌟 ここを書き換えるだけで表示が更新されます
+const VERSION = "v1.4.0"; 
 
 // ==================== ゲーム設定 ===================
 const COLS = 12; 
 const ROWS = 24; 
-const BLOCK_SIZE = 30; 
+const BLOCK_SIZE = 28; // 🌟 25から28に拡大
 const NEXT_COUNT = 5; 
 
 const canvas = document.getElementById('tetris-canvas');
@@ -21,15 +21,15 @@ const holdCtx = holdCanvas ? holdCanvas.getContext('2d') : null;
 
 const nextCanvases = Array.from(document.querySelectorAll('.next-canvas'));
 const nextContexts = nextCanvases.map(c => c.getContext('2d'));
-const NEXT_CANVAS_SIZE = 90; 
+const NEXT_CANVAS_SIZE = 84; // 🌟 28px * 3
 
 if (canvas) {
     canvas.width = COLS * BLOCK_SIZE;
     canvas.height = ROWS * BLOCK_SIZE;
 }
 if (holdCanvas) {
-    holdCanvas.width = 180;
-    holdCanvas.height = 180;
+    holdCanvas.width = 168; // 🌟 28px * 6
+    holdCanvas.height = 168;
 }
 nextCanvases.forEach(c => {
     c.width = NEXT_CANVAS_SIZE;
@@ -40,7 +40,7 @@ nextCanvases.forEach(c => {
 let score = 0;
 let level = 1;
 let linesClearedTotal = 0;
-let renCount = -1; // 🌟 REN用 (-1: 準備, 0: 1回目, 1: 1REN...)
+let renCount = -1; 
 let board = [];
 
 let currentPiece = null;
@@ -54,27 +54,18 @@ let currentDropInterval = defaultDropInterval;
 const SOFT_DROP_MULTIPLIER = 10; 
 let currentRotation = 0; 
 
-// ==================== ペントミノ定義 (18種) ====================
+// ==================== ピース定義 (18種) ====================
 const PIECES = [
     { shape: [[0,1,1],[1,1,0],[0,1,0]], color: '#FF5733' }, // F
     { shape: [[1,1,0],[0,1,1],[0,1,0]], color: '#FF8D6A' }, // F'
-    { shape: [[1,1,1,1,1]], color: '#00BFFF' },            // I (5x1)
+    { shape: [[1,1,1,1,1]], color: '#00BFFF' },            // I
     { shape: [[1,0],[1,0],[1,0],[1,1]], color: '#1E90FF' }, // L
     { shape: [[0,1],[0,1],[0,1],[1,1]], color: '#4682B4' }, // L'
     { shape: [[1,1],[1,1],[1,0]], color: '#FFD700' },       // P
     { shape: [[1,1],[1,1],[0,1]], color: '#FFA500' },       // P'
     { shape: [[0,1],[1,1],[1,0],[1,0]], color: '#9932CC' }, // N
     { shape: [[1,0],[1,1],[0,1],[0,1]], color: '#BA55D3' }, // N'
-    { 
-        shape: [
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 1, 1, 1, 0],
-            [0, 0, 1, 0, 0],
-            [0, 0, 1, 0, 0]
-        ], 
-        color: '#800080' 
-    }, // T (5x5 中心軸回転)
+    { shape: [[0,0,0,0,0],[0,0,0,0,0],[0,1,1,1,0],[0,0,1,0,0],[0,0,1,0,0]], color: '#800080' }, // T
     { shape: [[1,0,1],[1,1,1],[0,0,0]], color: '#3CB371' }, // U
     { shape: [[1,0,0],[1,0,0],[1,1,1]], color: '#4169E1' }, // V
     { shape: [[1,0,0],[1,1,0],[0,1,1]], color: '#DA70D6' }, // W
@@ -138,9 +129,7 @@ function isAllClear() {
 
 // ==================== 描画関数 ====================
 function renderScore() {
-    if (scoreElement) {
-        scoreElement.innerText = `${score} (Lv.${level})`;
-    }
+    if (scoreElement) scoreElement.innerText = `${score} (Lv.${level})`;
     if (renElement) {
         if (renCount > 0) {
             renElement.innerText = `${renCount} REN!`;
@@ -205,7 +194,7 @@ function drawBoard() {
                 }
             }
         }
-    } else if (gameLoop === null) {
+    } else if (gameLoop === null && document.getElementById('game-over-overlay').style.display !== 'flex') {
         ctx.fillStyle = "white";
         ctx.font = "20px Arial";
         ctx.textAlign = "center";
@@ -351,7 +340,7 @@ function checkLines() {
         }
     }
     if (linesCleared > 0) {
-        renCount++; // 2連続消去で 1 REN
+        renCount++;
         const allClearBonus = isAllClear();
         updateScore(linesCleared, renCount, allClearBonus);
     } else {
@@ -363,17 +352,8 @@ function checkLines() {
 function updateScore(lines, ren, allClear) {
     const basePoints = [0, 100, 300, 700, 1500, 5000]; 
     let points = (basePoints[lines] || 100) * level;
-
-    // RENボーナス (50 * REN * Level)
-    if (ren > 0) {
-        points += (50 * ren * level);
-    }
-
-    // 全消しボーナス (3000 * Level)
-    if (allClear) {
-        points += (3000 * level);
-    }
-
+    if (ren > 0) points += (50 * ren * level);
+    if (allClear) points += (3000 * level);
     score += points;
     linesClearedTotal += lines;
     if (Math.floor(linesClearedTotal / 10) >= level) {
@@ -423,6 +403,7 @@ function pieceRotate(direction = 1) {
 }
 
 function hardDrop() {
+    if (!currentPiece) return;
     const dropY = getDropY();
     const distance = dropY - currentPiece.y;
     if (distance > 0) { score += distance * 2; renderScore(); }
@@ -431,12 +412,20 @@ function hardDrop() {
     drawBoard();
 }
 
-// ==================== メイン処理 ====================
+// ==================== 🌟 リザルト処理 ====================
 function gameOver() {
-    clearInterval(gameLoop);
-    gameLoop = null; 
-    alert(`Game Over!\nFinal Score: ${score}\nLevel: ${level}`);
-    initBoard(); 
+    if (gameLoop) { clearInterval(gameLoop); gameLoop = null; }
+    document.getElementById('final-score').innerText = score;
+    document.getElementById('final-level').innerText = level;
+    document.getElementById('game-over-overlay').style.display = 'flex';
+}
+
+function retryGame() {
+    document.getElementById('game-over-overlay').style.display = 'none';
+    initBoard();
+    fillNextQueue();
+    spawnPiece();
+    resetGameLoop(defaultDropInterval);
 }
 
 function gameTick() {
@@ -462,12 +451,22 @@ function initBoard() {
 // ==================== 入力イベント ====================
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') { initBoard(); return; }
+    
+    // リザルト表示中のEnter
+    const overlay = document.getElementById('game-over-overlay');
+    if (overlay && overlay.style.display === 'flex') {
+        if (e.key === 'Enter') retryGame();
+        return;
+    }
+
+    // ゲーム開始のEnter
     if (currentPiece === null && e.key === 'Enter') {
         fillNextQueue();
         spawnPiece();
         resetGameLoop(defaultDropInterval);
         return;
     }
+
     if (!currentPiece) return;
     switch (e.key) {
         case 'ArrowLeft': pieceMove(-1, 0); break;
