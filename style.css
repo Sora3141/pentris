@@ -5,36 +5,46 @@ html, body {
     width: 100%;
 }
 
+/* style.css の該当箇所を上書きしてください */
+
 body {
     display: flex;
-    justify-content: center;
-    align-items: center; 
+    justify-content: center; 
+    align-items: center;     
     min-height: 100vh;
     margin: 0; 
     background-color: #333;
     font-family: 'Consolas', 'Courier New', monospace; 
     color: #fff;
     box-sizing: border-box; 
-    max-width: 100vw;
+    /* 🌟 overflow-x を auto にして横スクロールを許可する */
+    overflow-x: auto; 
     overflow-y: auto;
 }
 
 .page-wrapper {
     display: flex;
+    flex-direction: row; /* 🌟 確実に横並びを指定 */
     align-items: center; 
-    gap: 35px; 
-    padding: 30px;
+    justify-content: center;
+    gap: 30px; 
+    padding: 40px;
+    /* 🌟 重要：広告300x2 + ボード約750 + 隙間分を確保 */
+    min-width: 1400px; 
+    box-sizing: border-box;
 }
 
 .main-layout-container {
     display: flex;
+    flex-direction: row; /* 🌟 ボード内の横並びも固定 */
     gap: 20px; 
     border: 5px solid #1a1a1a;
     background-color: #444;
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-    flex-shrink: 0;
+    /* 🌟 画面が狭くても中身を潰さない */
+    flex-shrink: 0; 
 }
 
 .side-panel {
