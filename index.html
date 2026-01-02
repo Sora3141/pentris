@@ -39,26 +39,7 @@
                 </p>
             </div>
 
-            <div style="position: relative;">
-                <canvas id="tetris-canvas" width="336" height="672"></canvas>
-
-                <div id="game-over-overlay">
-                    <div class="result-card">
-                        <h2>GAME OVER</h2>
-                        <div class="final-score-area">
-                            <p>SCORE: <span id="final-score">0</span></p>
-                            <p>LEVEL: <span id="final-level">1</span></p>
-                        </div>
-                        <div class="ad-section-result">
-                            <div class="ad-label">SPONSORED</div>
-                            <div class="ad-placeholder-result">
-                                <script src="https://adm.shinobi.jp/s/70f20b8436b6578971af6010fd404ef0"></script>
-                            </div>
-                        </div>
-                        <button onclick="retryGame()">RETRY (Enter)</button>
-                    </div>
-                </div>
-            </div>
+            <canvas id="tetris-canvas" width="336" height="672"></canvas>
 
             <div class="right-panel side-panel">
                 <h3>NEXT</h3>
@@ -82,7 +63,23 @@
             <div class="ad-placeholder-rect"><script src="https://adm.shinobi.jp/s/c347d64a04d16a2fd1d5707ac08c5362"></script></div>
             <div class="ad-placeholder-rect"><script src="https://adm.shinobi.jp/s/1748647703490da9b1e637bdae93ac10"></script></div>
         </div>
+    </div>
 
+    <div id="game-over-overlay">
+        <div class="result-card">
+            <h2>GAME OVER</h2>
+            <div class="final-score-area">
+                <p>SCORE: <span id="final-score">0</span></p>
+                <p>LEVEL: <span id="final-level">1</span></p>
+            </div>
+            <div class="ad-section-result">
+                <div class="ad-label">SPONSORED</div>
+                <div class="ad-placeholder-result">
+                    <script src="https://adm.shinobi.jp/s/70f20b8436b6578971af6010fd404ef0"></script>
+                </div>
+            </div>
+            <button onclick="retryGame()">RETRY (Enter)</button>
+        </div>
     </div>
 
     <div id="version-display"></div>
