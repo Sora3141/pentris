@@ -19,15 +19,13 @@ body {
     overflow-y: auto;
 }
 
-/* 🌟 横並びを強制するための最小幅設定 */
 .page-wrapper {
     display: flex;
     flex-direction: row;
-    align-items: center; 
+    align-items: center;
     justify-content: center;
-    gap: 35px; 
+    gap: 35px;
     padding: 30px;
-    min-width: 1400px; /* 広告＋ボードの合計幅 */
 }
 
 .main-layout-container {
@@ -89,8 +87,6 @@ body {
 
 .result-card h2 { color: #ff3333; margin: 0 0 15px 0; text-shadow: 0 0 8px #ff3333; }
 .final-score-area p { font-size: 1.4em; color: #FFD700; margin: 5px 0; }
-.ad-section-result { margin: 15px 0; background-color: #111; border-radius: 5px; padding: 10px; }
-.ad-placeholder-result { width: 300px; height: 250px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 
 .result-card button {
     background-color: #00f0f0;
@@ -107,9 +103,6 @@ body {
 /* その他のパーツ */
 #hold-piece-canvas { background-color: #222; width: 168px; height: 168px; border: 1px solid #777; }
 .next-canvas { background-color: #222; width: 84px; height: 84px; border: 1px solid #777; }
-.ad-label { font-size: 9px; color: #888; margin-bottom: 5px; text-align: center; }
-.ad-outer-side { display: flex; flex-direction: column; gap: 15px; width: 300px; }
-.ad-placeholder-rect { width: 300px; height: 250px; background-color: #222; border: 1px dashed #555; display: flex; justify-content: center; align-items: center; }
 .score-status p { margin: 8px 0; font-size: 1.3em; color: #FFD700; }
 .controls { font-size: 0.8em; width: 150px; color: #ccc; border: 1px dashed #777; padding: 10px; }
 #version-display { position: fixed; bottom: 10px; right: 15px; font-size: 0.9em; color: #00f0f0; background: rgba(0,0,0,0.6); padding: 3px 10px; border-radius: 4px; z-index: 9999; }
