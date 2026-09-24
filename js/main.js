@@ -711,6 +711,8 @@ WebAppKit.init({
   title: 'PENT! — ペントミノ落ち物パズル',
   text: '5 マスのブロック「ペントミノ」で遊ぶ落ち物パズル',
 });
+// オフラインでも起動できるようにする
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 bindSettings();
 syncSettingsForm();
 applySound();

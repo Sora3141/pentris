@@ -397,6 +397,19 @@ kbd {
   color: var(--dim);
 }
 
+.credit {
+  margin: 0;
+  font-size: 11px;
+  color: var(--dim);
+}
+.credit a {
+  color: var(--muted);
+  font-weight: 600;
+  text-decoration: none;
+}
+.credit a:hover,
+.credit a:focus-visible { color: var(--text); text-decoration: underline; }
+
 .ov-title {
   margin: 0;
   font-size: clamp(22px, 10cqw, 46px);

@@ -7,6 +7,7 @@
 
 - リポジトリ: https://github.com/Sora3141/pentris
 - デモ: https://sora3141.github.io/pentris/
+- 制作: [T.OFO](https://sora3141.github.io/)
 
 ## 概要
 

@@ -1,5 +1,6 @@
 {
   "name": "PENT! — ペントミノ落ち物パズル",
+  "id": "./",
   "short_name": "PENT!",
   "description": "5 マスのブロック「ペントミノ」で遊ぶ落ち物パズル。",
   "start_url": "./",
