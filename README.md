@@ -5,9 +5,9 @@
 
 ## 🔗 リンク
 
-- リポジトリ: https://github.com/Sora3141/pentris
-- デモ: https://sora3141.github.io/pentris/
-- 制作: [T.OF...](https://sora3141.github.io/)
+- リポジトリ: https://github.com/t-of/pentris
+- デモ: https://t-of.github.io/pentris/
+- 制作: [T.OF...](https://t-of.github.io/)
 
 ## 遊び方
 

@@ -3,7 +3,7 @@
 // 自分のファイルは network-first（つながっていれば常に最新、圏外なら保存しておいた版）。
 // Google Fonts は変わらないので cache-first。
 //
-// 注意: キャッシュ（CacheStorage）は sora3141.github.io のすべてのアプリで共有されている。
+// 注意: キャッシュ（CacheStorage）は t-of.github.io のすべてのアプリで共有されている。
 // 古いキャッシュを消すときは、必ず自分の PREFIX で始まるものだけを消す。
 // keys.filter(k => k !== CACHE) のように書くと、ほかのアプリのキャッシュまで消してしまう。
 
