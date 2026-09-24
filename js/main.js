@@ -38,6 +38,7 @@ const el = {
   app: $('#app'),
   well: $('#well'),
   frame: $('#frame'),
+  stage: $('#stage'),
   board: $('#board'),
   callouts: $('#callouts'),
   sideLeft: $('.side-left'),
@@ -448,8 +449,8 @@ function layout() {
     availW = window.innerWidth - el.sideLeft.offsetWidth - el.sideRight.offsetWidth - gap * 2 - pad;
   }
   const cell = Math.max(8, Math.floor(Math.min((availW - border * 2) / COLS, (availH - border * 2) / ROWS)));
-  el.frame.style.width = `${cell * COLS + border * 2}px`;
-  el.frame.style.height = `${cell * ROWS + border * 2}px`;
+  el.frame.style.width = el.stage.style.width = `${cell * COLS + border * 2}px`;
+  el.frame.style.height = el.stage.style.height = `${cell * ROWS + border * 2}px`;
   renderer.resize(cell);
   zone.style.visibility = zoneOn && zone.clientHeight < 48 ? 'hidden' : '';
   drawQueue();

@@ -70,78 +70,79 @@
 
     <!-- 盤面 -->
     <div class="well" id="well">
+      <div class="stage" id="stage">
       <div class="frame" id="frame">
         <canvas id="board"></canvas>
         <div class="callouts" id="callouts" aria-live="polite"></div>
         <button class="ai-chip" data-act="ai-speed" title="AI の速さを切り替え"><b>AI</b><span id="ai-speed">普通</span></button>
-
-        <div class="overlay show" id="ov-title">
-          <div class="ov-inner">
-            <div class="logo"><span>PENT</span><b>!</b></div>
-            <p class="tagline">5 マスで積む、落ち物パズル</p>
-            <canvas id="gallery" class="gallery" aria-label="18 種類のペントミノ"></canvas>
-            <div class="seg" role="radiogroup" aria-label="モード">
-              <button type="button" role="radio" data-mode="endless">ENDLESS</button>
-              <button type="button" role="radio" data-mode="p500">500 PIECES</button>
-            </div>
-            <button class="btn primary" data-act="start">PLAY<kbd>Enter</kbd></button>
-            <button class="btn ghost" data-act="ai">AI のプレイを観戦</button>
-            <div class="seg touch-only" role="radiogroup" aria-label="タッチ操作">
-              <button type="button" role="radio" data-ctl="buttons"><svg><use href="#i-tap"/></svg>ボタン</button>
-              <button type="button" role="radio" data-ctl="gesture"><svg><use href="#i-swipe"/></svg>スワイプ</button>
-            </div>
-            <div class="btn-row">
-              <button class="btn ghost" data-act="help">操作方法</button>
-              <button class="btn ghost" data-act="settings">設定</button>
-            </div>
-            <p class="ov-best">BEST <b id="title-best">0</b></p>
-            <p class="version" id="version"></p>
+      </div>
+      <div class="overlay show" id="ov-title">
+        <div class="ov-inner">
+          <div class="logo"><span>PENT</span><b>!</b></div>
+          <p class="tagline">5 マスで積む、落ち物パズル</p>
+          <canvas id="gallery" class="gallery" aria-label="18 種類のペントミノ"></canvas>
+          <div class="seg" role="radiogroup" aria-label="モード">
+            <button type="button" role="radio" data-mode="endless">ENDLESS</button>
+            <button type="button" role="radio" data-mode="p500">500 PIECES</button>
           </div>
-        </div>
-
-        <div class="overlay" id="ov-coach">
-          <div class="ov-inner">
-            <h2 class="ov-title small">スワイプ操作</h2>
-            <ul class="coach">
-              <li><svg><use href="#i-swipe"/></svg><b>左右になぞる</b><span>移動</span></li>
-              <li><svg><use href="#i-tap"/></svg><b>タップ</b><span>回転（左半分で左 / 右半分で右）</span></li>
-              <li><svg><use href="#i-hard"/></svg><b>下にフリック</b><span>ハードドロップ（ゆっくりなぞるとソフト）</span></li>
-              <li><svg><use href="#i-flick-up"/></svg><b>上にフリック</b><span>ホールド</span></li>
-            </ul>
-            <button class="btn primary" data-act="coach-ok">はじめる</button>
+          <button class="btn primary" data-act="start">PLAY<kbd>Enter</kbd></button>
+          <button class="btn ghost" data-act="ai">AI のプレイを観戦</button>
+          <div class="seg touch-only" role="radiogroup" aria-label="タッチ操作">
+            <button type="button" role="radio" data-ctl="buttons"><svg><use href="#i-tap"/></svg>ボタン</button>
+            <button type="button" role="radio" data-ctl="gesture"><svg><use href="#i-swipe"/></svg>スワイプ</button>
           </div>
-        </div>
-
-        <div class="overlay" id="ov-pause">
-          <div class="ov-inner">
-            <h2 class="ov-title">PAUSED</h2>
-            <button class="btn primary" data-act="resume">再開<kbd>Esc</kbd></button>
-            <button class="btn" data-act="restart">リスタート<kbd>R</kbd></button>
-            <div class="btn-row">
-              <button class="btn ghost" data-act="settings">設定</button>
-              <button class="btn ghost" data-act="title">タイトル</button>
-            </div>
+          <div class="btn-row">
+            <button class="btn ghost" data-act="help">操作方法</button>
+            <button class="btn ghost" data-act="settings">設定</button>
           </div>
+          <p class="ov-best">BEST <b id="title-best">0</b></p>
+          <p class="version" id="version"></p>
         </div>
+      </div>
 
-        <div class="overlay" id="ov-over">
-          <div class="ov-inner">
-            <h2 class="ov-title danger" id="over-title">GAME OVER</h2>
-            <p class="mode-badge" id="over-mode">ENDLESS</p>
-            <div class="new-best" id="new-best">NEW BEST</div>
-            <div class="final-score"><span class="label">SCORE</span><output id="final-score">0</output></div>
-            <dl class="result-grid">
-              <div><dt>LEVEL</dt><dd id="r-level">1</dd></div>
-              <div><dt>LINES</dt><dd id="r-lines">0</dd></div>
-              <div><dt>TIME</dt><dd id="r-time">0:00</dd></div>
-              <div><dt>PIECES</dt><dd id="r-pieces">0</dd></div>
-              <div><dt>MAX REN</dt><dd id="r-ren">0</dd></div>
-              <div><dt>PPS</dt><dd id="r-pps">0.00</dd></div>
-            </dl>
-            <button class="btn primary" data-act="restart">RETRY<kbd>Enter</kbd></button>
+      <div class="overlay" id="ov-coach">
+        <div class="ov-inner">
+          <h2 class="ov-title small">スワイプ操作</h2>
+          <ul class="coach">
+            <li><svg><use href="#i-swipe"/></svg><b>左右になぞる</b><span>移動</span></li>
+            <li><svg><use href="#i-tap"/></svg><b>タップ</b><span>回転（左半分で左 / 右半分で右）</span></li>
+            <li><svg><use href="#i-hard"/></svg><b>下にフリック</b><span>ハードドロップ（ゆっくりなぞるとソフト）</span></li>
+            <li><svg><use href="#i-flick-up"/></svg><b>上にフリック</b><span>ホールド</span></li>
+          </ul>
+          <button class="btn primary" data-act="coach-ok">はじめる</button>
+        </div>
+      </div>
+
+      <div class="overlay" id="ov-pause">
+        <div class="ov-inner">
+          <h2 class="ov-title">PAUSED</h2>
+          <button class="btn primary" data-act="resume">再開<kbd>Esc</kbd></button>
+          <button class="btn" data-act="restart">リスタート<kbd>R</kbd></button>
+          <div class="btn-row">
+            <button class="btn ghost" data-act="settings">設定</button>
             <button class="btn ghost" data-act="title">タイトル</button>
           </div>
         </div>
+      </div>
+
+      <div class="overlay" id="ov-over">
+        <div class="ov-inner">
+          <h2 class="ov-title danger" id="over-title">GAME OVER</h2>
+          <p class="mode-badge" id="over-mode">ENDLESS</p>
+          <div class="new-best" id="new-best">NEW BEST</div>
+          <div class="final-score"><span class="label">SCORE</span><output id="final-score">0</output></div>
+          <dl class="result-grid">
+            <div><dt>LEVEL</dt><dd id="r-level">1</dd></div>
+            <div><dt>LINES</dt><dd id="r-lines">0</dd></div>
+            <div><dt>TIME</dt><dd id="r-time">0:00</dd></div>
+            <div><dt>PIECES</dt><dd id="r-pieces">0</dd></div>
+            <div><dt>MAX REN</dt><dd id="r-ren">0</dd></div>
+            <div><dt>PPS</dt><dd id="r-pps">0.00</dd></div>
+          </dl>
+          <button class="btn primary" data-act="restart">RETRY<kbd>Enter</kbd></button>
+          <button class="btn ghost" data-act="title">タイトル</button>
+        </div>
+      </div>
       </div>
       <div class="gesture-zone" aria-hidden="true">
         <span><svg><use href="#i-swipe"/></svg>なぞって移動</span>

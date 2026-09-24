@@ -110,6 +110,14 @@ kbd {
   min-width: 0;
 }
 
+.stage {
+  position: relative;
+  flex: none;
+}
+@media (min-width: 761px) {
+  .stage { container-type: size; }
+}
+
 .frame {
   position: relative;
   flex: none;
@@ -122,7 +130,6 @@ kbd {
     0 0 0 1px rgba(0, 0, 0, 0.6),
     0 40px 90px -30px rgba(0, 0, 0, 0.9),
     0 0 80px -20px hsl(var(--accent-h) 90% 60% / 0.35);
-  will-change: transform;
 }
 .frame canvas { display: block; }
 
@@ -319,6 +326,8 @@ kbd {
   position: absolute;
   inset: 0;
   z-index: 3;
+  border-radius: 14px;
+  overflow: hidden;
   display: grid;
   place-items: center;
   padding: 7cqw;
@@ -1057,6 +1066,31 @@ input[type='range'] { width: 140px; accent-color: var(--accent); }
   }
   .frame { border-radius: 12px; }
 
+  /* タイトル・ポーズ・リザルトは全画面で表示する */
+  .overlay {
+    position: fixed;
+    z-index: 40;
+    border-radius: 0;
+    overflow-y: auto;
+    padding:
+      max(20px, env(safe-area-inset-top))
+      20px
+      max(20px, env(safe-area-inset-bottom));
+    background: radial-gradient(circle at 50% 35%, rgba(14, 18, 38, 0.82), rgba(6, 8, 18, 0.96));
+  }
+  .ov-inner {
+    max-width: 380px;
+    margin: auto;
+    gap: clamp(10px, 2.2vh, 20px);
+  }
+  .ov-inner > .btn,
+  .btn-row,
+  .ov-inner > .seg { width: 100%; }
+  .logo { font-size: min(26vw, 108px); }
+  .btn { font-size: 15px; }
+  .seg button { font-size: 13px; }
+  .result-grid { width: 100%; }
+
   /* ボタン操作 */
   .pads {
     grid-area: pads;
@@ -1067,6 +1101,16 @@ input[type='range'] { width: 140px; accent-color: var(--accent); }
   .pad { padding-top: 2px; }
   html[data-ctl='gesture'] .pads,
   .app[data-ai='on'] .pads { display: none; }
+}
+
+@media (max-width: 760px) and (max-height: 640px) {
+  .gallery,
+  .version { display: none; }
+}
+@media (max-width: 760px) and (max-height: 540px) {
+  .tagline { display: none; }
+  .ov-inner { gap: 10px; }
+  .btn { padding: 0.7em 1.2em; }
 }
 
 @media (prefers-reduced-motion: reduce) {
