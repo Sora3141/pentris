@@ -22,6 +22,8 @@
   --font: 'Space Grotesk', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
   --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --wak-accent: var(--accent);
+  --wak-font: var(--font);
   color-scheme: dark;
   transition: --accent-h 1.2s ease;
 }
@@ -29,6 +31,10 @@
 *,
 *::before,
 *::after { box-sizing: border-box; }
+
+html {
+  background-color: #070912;
+}
 
 html,
 body {
@@ -339,6 +345,12 @@ kbd {
   transition: opacity 0.3s, visibility 0.3s;
 }
 .overlay.show { opacity: 1; visibility: visible; }
+/* 隠している間は描画自体をやめる（Safari 26 がバーの色を決めるときに拾わないように） */
+.overlay:not(.show) { display: none; }
+@starting-style {
+  .overlay.show { opacity: 0; }
+  .overlay.show .ov-inner { transform: translateY(10px) scale(0.97); }
+}
 
 .ov-inner {
   width: 100%;
@@ -496,6 +508,22 @@ kbd {
 .btn.ghost { background: transparent; border-color: var(--line); }
 .btn.ghost:hover { background: rgba(255, 255, 255, 0.06); }
 .btn.small { font-size: 13px; padding: 0.6em 1.2em; }
+.btn svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.app-row {
+  width: min(100%, 76cqw);
+  display: flex;
+  gap: 8px;
+}
+.app-row .btn { flex: 1; padding: 0.7em 0.6em; font-size: clamp(12px, 3.3cqw, 15px); }
 .btn-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1085,6 +1113,7 @@ input[type='range'] { width: 140px; accent-color: var(--accent); }
   }
   .ov-inner > .btn,
   .btn-row,
+  .app-row,
   .ov-inner > .seg { width: 100%; }
   .logo { font-size: min(26vw, 108px); }
   .btn { font-size: 15px; }

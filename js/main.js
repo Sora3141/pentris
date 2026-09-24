@@ -243,6 +243,8 @@ function haptic(pattern) {
 function showOverlay(name) {
   for (const [key, ov] of Object.entries(el.overlays)) ov.classList.toggle('show', key === name);
   el.app.dataset.state = state;
+  // 隠れている間はサイズが 0 なので、表示したときに描き直す
+  if (name === 'title') drawGallery(el.gallery);
 }
 
 function startGame(ai = false) {
@@ -567,6 +569,11 @@ function act(action) {
       break;
     case 'settings': openDialog(el.dlgSettings); break;
     case 'help': openDialog(el.dlgHelp); break;
+    case 'share-score':
+      WebAppKit.share({
+        text: `PENT!（${mode().label}${aiCtl.on ? '・AI' : ''}）で ${game.score.toLocaleString()} 点！`,
+      });
+      break;
     case 'coach-ok':
       store.set('pent.coached', true);
       startGame();
@@ -700,6 +707,10 @@ document.documentElement.classList.toggle('touch', isTouch);
 document.documentElement.classList.toggle('can-vibrate', 'vibrate' in navigator);
 $('#version').textContent = VERSION;
 renderer.grid = settings.grid;
+WebAppKit.init({
+  title: 'PENT! — ペントミノ落ち物パズル',
+  text: '5 マスのブロック「ペントミノ」で遊ぶ落ち物パズル',
+});
 bindSettings();
 syncSettingsForm();
 applySound();

@@ -11,11 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="PENT!">
   <link rel="manifest" href="./manifest.webmanifest">
   <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
   <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./webapp-kit/webapp-kit.css">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
@@ -35,6 +35,8 @@
       <symbol id="i-swipe" viewBox="0 0 24 24"><path d="M3.5 12h17M7.5 8l-4 4 4 4M16.5 8l4 4-4 4"/></symbol>
       <symbol id="i-tap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="12" r="7" opacity=".45"/></symbol>
       <symbol id="i-flick-up" viewBox="0 0 24 24"><path d="M6.5 19.5 12 14l5.5 5.5M6.5 13.5 12 8l5.5 5.5M5 4h14"/></symbol>
+      <symbol id="i-install" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></symbol>
+      <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 3.5v11M8 7.5l4-4 4 4M7 11H5.5v9.5h13V11H17"/></symbol>
       <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
     </defs>
   </svg>
@@ -95,6 +97,10 @@
             <button class="btn ghost" data-act="help">操作方法</button>
             <button class="btn ghost" data-act="settings">設定</button>
           </div>
+          <div class="app-row">
+            <button class="btn ghost" data-wak="install" hidden><svg><use href="#i-install"/></svg>アプリにする</button>
+            <button class="btn ghost" data-wak="share"><svg><use href="#i-share"/></svg>共有</button>
+          </div>
           <p class="ov-best">BEST <b id="title-best">0</b></p>
           <p class="version" id="version"></p>
         </div>
@@ -140,7 +146,10 @@
             <div><dt>PPS</dt><dd id="r-pps">0.00</dd></div>
           </dl>
           <button class="btn primary" data-act="restart">RETRY<kbd>Enter</kbd></button>
-          <button class="btn ghost" data-act="title">タイトル</button>
+          <div class="btn-row">
+            <button class="btn ghost" data-act="share-score"><svg><use href="#i-share"/></svg>スコアを共有</button>
+            <button class="btn ghost" data-act="title">タイトル</button>
+          </div>
         </div>
       </div>
       </div>
@@ -335,6 +344,7 @@
   <script src="./js/touch.js"></script>
   <script src="./js/ai.js"></script>
   <script src="./js/ai-weights.js"></script>
+  <script src="./webapp-kit/webapp-kit.js"></script>
   <script src="./js/main.js"></script>
 </body>
 </html>
