@@ -8,7 +8,14 @@ const Sfx = (() => {
   let enabled = true;
   let volume = 0.7;
 
+  // iPhone のマナーモードでも鳴らす（Safari 16.4 以降）。
+  // 'playback' にすると音楽アプリの曲が止まるので、アプリの音がオンのときだけにする。
+  function setAudioSession(soundOn) {
+    try { if (navigator.audioSession) navigator.audioSession.type = soundOn ? 'playback' : 'auto'; } catch { /* 対応していない */ }
+  }
+
   function init() {
+    if (enabled) setAudioSession(true);
     if (ac) {
       if (ac.state === 'suspended') ac.resume();
       return;
@@ -62,7 +69,10 @@ const Sfx = (() => {
 
   return {
     init,
-    setEnabled(v) { enabled = v; },
+    setEnabled(v) {
+      enabled = v;
+      setAudioSession(v);
+    },
     setVolume(v) {
       volume = v;
       if (master) master.gain.value = v * 0.5;
