@@ -1,4 +1,4 @@
-# PENT!
+# QUINTILE
 
 T.OF... のアプリ。https://t-of.github.io/pentris/
 

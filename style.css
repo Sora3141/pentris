@@ -366,7 +366,7 @@ kbd {
 .ov-inner > .btn,
 .btn-row { width: min(100%, 76cqw); }
 
-.logo { font-size: 27cqw; }
+.logo { font-size: 17cqw; }
 .tagline {
   margin: -0.4em 0 0;
   font-size: clamp(12px, 3.6cqw, 16px);
@@ -1128,7 +1128,7 @@ input[type='range'] { width: 140px; accent-color: var(--accent); }
   .btn-row,
   .app-row,
   .ov-inner > .seg { width: 100%; }
-  .logo { font-size: min(26vw, 108px); }
+  .logo { font-size: min(17vw, 72px); }
   .btn { font-size: 15px; }
   .seg button { font-size: 13px; }
   .result-grid { width: 100%; }

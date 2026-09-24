@@ -571,7 +571,7 @@ function act(action) {
     case 'help': openDialog(el.dlgHelp); break;
     case 'share-score':
       WebAppKit.share({
-        text: `PENT!（${mode().label}${aiCtl.on ? '・AI' : ''}）で ${game.score.toLocaleString()} 点！`,
+        text: `QUINTILE（${mode().label}${aiCtl.on ? '・AI' : ''}）で ${game.score.toLocaleString()} 点！`,
       });
       break;
     case 'coach-ok':
@@ -708,7 +708,7 @@ document.documentElement.classList.toggle('can-vibrate', 'vibrate' in navigator)
 $('#version').textContent = VERSION;
 renderer.grid = settings.grid;
 WebAppKit.init({
-  title: 'PENT! — ペントミノ落ち物パズル',
+  title: 'QUINTILE — 5 マスのブロックで列を消す',
   text: '5 マスのブロック「ペントミノ」で遊ぶ落ち物パズル',
 });
 // オフラインでも起動できるようにする
