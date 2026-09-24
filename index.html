@@ -1,63 +1,339 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PENT! - 究極のブロックパズル</title>
-    <link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#070912">
+  <meta name="description" content="5 マスのブロック「ペントミノ」で遊ぶ落ち物パズル。">
+  <title>PENT! — ペントミノ落ち物パズル</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PENT!">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div class="page-wrapper">
-        <div class="main-layout-container">
-            <div class="left-panel side-panel">
-                <h2>PENT!</h2>
-                <div class="hold-slot">
-                    <h2>HOLD</h2>
-                    <canvas id="hold-piece-canvas" width="168" height="168"></canvas>
-                </div>
-                <div class="score-status">
-                    <div id="ren-display" style="opacity: 0; color: #00f0f0; font-size: 1.3em; font-weight: bold; text-align: center;">0 REN!</div>
-                    <p>SCORE: <span id="score">0 (Lv.1)</span></p> 
-                </div>
-                <p class="controls">
-                    ← →: 移動<br>
-                    ↓: ソフト<br>
-                    Space: ハード<br>
-                    ↑ / X: 回転<br>
-                    Z: 逆回転<br>
-                    C: ホールド<br>
-                    Enter: 開始<br>
-                    esc: リセット
-                </p>
-            </div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-left" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5"/></symbol>
+      <symbol id="i-right" viewBox="0 0 24 24"><path d="M9.5 5.5 16 12l-6.5 6.5"/></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path d="M5.5 9.5 12 16l6.5-6.5"/></symbol>
+      <symbol id="i-hard" viewBox="0 0 24 24"><path d="M6.5 4.5 12 10l5.5-5.5M6.5 10.5 12 16l5.5-5.5M5 20h14"/></symbol>
+      <symbol id="i-cw" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4v4.5H15"/></symbol>
+      <symbol id="i-ccw" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4v4.5H9"/></symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24"><path d="M9 6v12M15 6v12"/></symbol>
+      <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4ZM15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+      <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4ZM16 9.5l5 5M21 9.5l-5 5"/></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></symbol>
+      <symbol id="i-swipe" viewBox="0 0 24 24"><path d="M3.5 12h17M7.5 8l-4 4 4 4M16.5 8l4 4-4 4"/></symbol>
+      <symbol id="i-tap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="12" r="7" opacity=".45"/></symbol>
+      <symbol id="i-flick-up" viewBox="0 0 24 24"><path d="M6.5 19.5 12 14l5.5 5.5M6.5 13.5 12 8l5.5 5.5M5 4h14"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    </defs>
+  </svg>
 
-            <canvas id="tetris-canvas" width="336" height="672"></canvas>
+  <canvas id="backdrop" aria-hidden="true"></canvas>
 
-            <div class="right-panel side-panel">
-                <h3>NEXT</h3>
-                <div class="next-pieces-container">
-                    <canvas class="next-canvas" id="next-piece-canvas-0" width="84" height="84"></canvas>
-                    <canvas class="next-canvas" id="next-piece-canvas-1" width="84" height="84"></canvas>
-                    <canvas class="next-canvas" id="next-piece-canvas-2" width="84" height="84"></canvas>
-                    <canvas class="next-canvas" id="next-piece-canvas-3" width="84" height="84"></canvas>
-                    <canvas class="next-canvas" id="next-piece-canvas-4" width="84" height="84"></canvas>
-                </div>
-            </div>
+  <main class="app" id="app">
+    <!-- 左パネル -->
+    <aside class="side side-left">
+      <div class="brand" aria-label="PENT!"><span>PENT</span><b>!</b></div>
+
+      <section class="card hold-card">
+        <header class="card-head"><span>HOLD</span><kbd>C</kbd></header>
+        <canvas id="hold" class="preview"></canvas>
+      </section>
+
+      <section class="card stats-card">
+        <div class="stat stat-score">
+          <span class="label">SCORE</span>
+          <output id="score" class="value">0</output>
         </div>
+        <div class="stat-row">
+          <div class="stat"><span class="label">LEVEL</span><output id="level" class="value">1</output></div>
+          <div class="stat"><span class="label">LINES</span><output id="lines" class="value">0</output></div>
+          <div class="stat stat-time"><span class="label" id="stat3-label">TIME</span><output id="time" class="value">0:00</output></div>
+        </div>
+        <div class="progress" aria-hidden="true"><i id="progress"></i></div>
+        <div class="stat stat-best"><span class="label">BEST</span><output id="best" class="value">0</output></div>
+      </section>
+
+      <div class="ren" id="ren" aria-live="polite"><b id="ren-count">0</b><span>REN</span></div>
+    </aside>
+
+    <!-- 盤面 -->
+    <div class="well" id="well">
+      <div class="frame" id="frame">
+        <canvas id="board"></canvas>
+        <div class="callouts" id="callouts" aria-live="polite"></div>
+        <button class="ai-chip" data-act="ai-speed" title="AI の速さを切り替え"><b>AI</b><span id="ai-speed">普通</span></button>
+
+        <div class="overlay show" id="ov-title">
+          <div class="ov-inner">
+            <div class="logo"><span>PENT</span><b>!</b></div>
+            <p class="tagline">5 マスで積む、落ち物パズル</p>
+            <canvas id="gallery" class="gallery" aria-label="18 種類のペントミノ"></canvas>
+            <div class="seg" role="radiogroup" aria-label="モード">
+              <button type="button" role="radio" data-mode="endless">ENDLESS</button>
+              <button type="button" role="radio" data-mode="p500">500 PIECES</button>
+            </div>
+            <button class="btn primary" data-act="start">PLAY<kbd>Enter</kbd></button>
+            <button class="btn ghost" data-act="ai">AI のプレイを観戦</button>
+            <div class="seg touch-only" role="radiogroup" aria-label="タッチ操作">
+              <button type="button" role="radio" data-ctl="buttons"><svg><use href="#i-tap"/></svg>ボタン</button>
+              <button type="button" role="radio" data-ctl="gesture"><svg><use href="#i-swipe"/></svg>スワイプ</button>
+            </div>
+            <div class="btn-row">
+              <button class="btn ghost" data-act="help">操作方法</button>
+              <button class="btn ghost" data-act="settings">設定</button>
+            </div>
+            <p class="ov-best">BEST <b id="title-best">0</b></p>
+            <p class="version" id="version"></p>
+          </div>
+        </div>
+
+        <div class="overlay" id="ov-coach">
+          <div class="ov-inner">
+            <h2 class="ov-title small">スワイプ操作</h2>
+            <ul class="coach">
+              <li><svg><use href="#i-swipe"/></svg><b>左右になぞる</b><span>移動</span></li>
+              <li><svg><use href="#i-tap"/></svg><b>タップ</b><span>回転（左半分で左 / 右半分で右）</span></li>
+              <li><svg><use href="#i-hard"/></svg><b>下にフリック</b><span>ハードドロップ（ゆっくりなぞるとソフト）</span></li>
+              <li><svg><use href="#i-flick-up"/></svg><b>上にフリック</b><span>ホールド</span></li>
+            </ul>
+            <button class="btn primary" data-act="coach-ok">はじめる</button>
+          </div>
+        </div>
+
+        <div class="overlay" id="ov-pause">
+          <div class="ov-inner">
+            <h2 class="ov-title">PAUSED</h2>
+            <button class="btn primary" data-act="resume">再開<kbd>Esc</kbd></button>
+            <button class="btn" data-act="restart">リスタート<kbd>R</kbd></button>
+            <div class="btn-row">
+              <button class="btn ghost" data-act="settings">設定</button>
+              <button class="btn ghost" data-act="title">タイトル</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="overlay" id="ov-over">
+          <div class="ov-inner">
+            <h2 class="ov-title danger" id="over-title">GAME OVER</h2>
+            <p class="mode-badge" id="over-mode">ENDLESS</p>
+            <div class="new-best" id="new-best">NEW BEST</div>
+            <div class="final-score"><span class="label">SCORE</span><output id="final-score">0</output></div>
+            <dl class="result-grid">
+              <div><dt>LEVEL</dt><dd id="r-level">1</dd></div>
+              <div><dt>LINES</dt><dd id="r-lines">0</dd></div>
+              <div><dt>TIME</dt><dd id="r-time">0:00</dd></div>
+              <div><dt>PIECES</dt><dd id="r-pieces">0</dd></div>
+              <div><dt>MAX REN</dt><dd id="r-ren">0</dd></div>
+              <div><dt>PPS</dt><dd id="r-pps">0.00</dd></div>
+            </dl>
+            <button class="btn primary" data-act="restart">RETRY<kbd>Enter</kbd></button>
+            <button class="btn ghost" data-act="title">タイトル</button>
+          </div>
+        </div>
+      </div>
+      <div class="gesture-zone" aria-hidden="true">
+        <span><svg><use href="#i-swipe"/></svg>なぞって移動</span>
+        <span><svg><use href="#i-tap"/></svg>タップで回転</span>
+      </div>
     </div>
 
-    <div id="game-over-overlay">
-        <div class="result-card">
-            <h2>GAME OVER</h2>
-            <div class="final-score-area">
-                <p>SCORE: <span id="final-score">0</span></p>
-                <p>LEVEL: <span id="final-level">1</span></p>
-            </div>
-            <button onclick="retryGame()">RETRY (Enter)</button>
+    <!-- 右パネル -->
+    <aside class="side side-right">
+      <section class="card next-card">
+        <header class="card-head"><span>NEXT</span></header>
+        <canvas id="next0" class="preview preview-main"></canvas>
+        <div class="next-rest">
+          <canvas id="next1" class="preview"></canvas>
+          <canvas id="next2" class="preview"></canvas>
+          <canvas id="next3" class="preview"></canvas>
+          <canvas id="next4" class="preview"></canvas>
         </div>
-    </div>
+      </section>
 
-    <div id="version-display"></div>
-    <script src="./tetris.js"></script>
+      <div class="toolbar">
+        <button class="icon-btn" data-act="pause" title="ポーズ (Esc)" aria-label="ポーズ"><svg><use href="#i-pause"/></svg></button>
+        <button class="icon-btn" data-act="sound" title="サウンド" aria-label="サウンド切替" id="btn-sound"><svg><use href="#i-sound"/></svg></button>
+        <button class="icon-btn" data-act="settings" title="設定" aria-label="設定"><svg><use href="#i-gear"/></svg></button>
+        <button class="icon-btn" data-act="help" title="操作方法" aria-label="操作方法"><svg><use href="#i-help"/></svg></button>
+      </div>
+
+      <ul class="keys">
+        <li><span><kbd>←</kbd><kbd>→</kbd></span>移動</li>
+        <li><span><kbd>↓</kbd></span>ソフトドロップ</li>
+        <li><span><kbd>Space</kbd></span>ハードドロップ</li>
+        <li><span><kbd>↑</kbd><kbd>X</kbd></span>右回転</li>
+        <li><span><kbd>Z</kbd></span>左回転</li>
+        <li><span><kbd>C</kbd><kbd>Shift</kbd></span>ホールド</li>
+        <li><span><kbd>Esc</kbd><kbd>P</kbd></span>ポーズ</li>
+      </ul>
+    </aside>
+
+    <!-- タッチ操作（ボタン） -->
+    <div class="pads">
+    <div class="pad pad-left" aria-label="移動操作">
+      <button class="pad-btn pill" data-key="hold">HOLD</button>
+      <div class="pad-row">
+        <button class="pad-btn" data-key="left" aria-label="左"><svg><use href="#i-left"/></svg></button>
+        <button class="pad-btn" data-key="soft" aria-label="ソフトドロップ"><svg><use href="#i-down"/></svg></button>
+        <button class="pad-btn" data-key="right" aria-label="右"><svg><use href="#i-right"/></svg></button>
+      </div>
+    </div>
+    <div class="pad pad-right" aria-label="回転操作">
+      <button class="pad-btn pill" data-key="hard"><svg><use href="#i-hard"/></svg>DROP</button>
+      <div class="pad-row">
+        <button class="pad-btn" data-key="ccw" aria-label="左回転"><svg><use href="#i-ccw"/></svg></button>
+        <button class="pad-btn accent" data-key="cw" aria-label="右回転"><svg><use href="#i-cw"/></svg></button>
+      </div>
+    </div>
+    </div>
+  </main>
+
+  <div class="rotate-hint" aria-live="polite">
+    <div class="rotate-icon"></div>
+    <p>縦向きで遊んでください</p>
+  </div>
+
+  <!-- 設定 -->
+  <dialog class="dialog" id="dlg-settings">
+    <form method="dialog" class="dialog-body">
+      <header class="dialog-head">
+        <h2>設定</h2>
+        <button class="icon-btn" value="close" aria-label="閉じる"><svg><use href="#i-close"/></svg></button>
+      </header>
+
+      <div class="setting">
+        <label for="s-sound">サウンド</label>
+        <input type="checkbox" class="switch" id="s-sound">
+      </div>
+      <div class="setting">
+        <label for="s-volume">音量</label>
+        <input type="range" id="s-volume" min="0" max="1" step="0.05">
+      </div>
+      <div class="setting">
+        <label for="s-ghost">ゴースト表示</label>
+        <input type="checkbox" class="switch" id="s-ghost">
+      </div>
+      <div class="setting">
+        <label for="s-grid">グリッド表示</label>
+        <input type="checkbox" class="switch" id="s-grid">
+      </div>
+      <div class="setting">
+        <label for="s-shake">画面の揺れ</label>
+        <input type="checkbox" class="switch" id="s-shake">
+      </div>
+
+      <div class="touch-only">
+        <h3 class="setting-group">タッチ操作</h3>
+        <div class="setting">
+          <label>操作タイプ</label>
+          <div class="seg seg-small" role="radiogroup" aria-label="操作タイプ">
+            <button type="button" role="radio" data-ctl="buttons">ボタン</button>
+            <button type="button" role="radio" data-ctl="gesture">スワイプ</button>
+          </div>
+        </div>
+        <div class="setting">
+          <label for="s-sens">スワイプ感度<small>大きいほど少ない指の移動で動く</small></label>
+          <div class="range-wrap"><input type="range" id="s-sens" min="0.6" max="1.8" step="0.1"><output id="o-sens"></output></div>
+        </div>
+        <div class="setting vibrate-only">
+          <label for="s-vibrate">振動</label>
+          <input type="checkbox" class="switch" id="s-vibrate">
+        </div>
+      </div>
+
+      <h3 class="setting-group">操作感</h3>
+      <div class="setting">
+        <label for="s-das">DAS<small>長押しで連続移動が始まるまで</small></label>
+        <div class="range-wrap"><input type="range" id="s-das" min="40" max="300" step="5"><output id="o-das"></output></div>
+      </div>
+      <div class="setting">
+        <label for="s-arr">ARR<small>連続移動の間隔（0 で瞬間移動）</small></label>
+        <div class="range-wrap"><input type="range" id="s-arr" min="0" max="100" step="5"><output id="o-arr"></output></div>
+      </div>
+
+      <footer class="dialog-foot">
+        <button type="button" class="btn ghost small danger-text" id="reset-best">ハイスコアをリセット</button>
+        <button class="btn primary small" value="close">完了</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <!-- 操作方法 -->
+  <dialog class="dialog" id="dlg-help">
+    <form method="dialog" class="dialog-body">
+      <header class="dialog-head">
+        <h2>遊び方</h2>
+        <button class="icon-btn" value="close" aria-label="閉じる"><svg><use href="#i-close"/></svg></button>
+      </header>
+      <p class="help-lead">落ちてくる 5 マスのブロック（ペントミノ）を並べて、横一列を揃えると消えます。一度に多く消すほど高得点。積み上がって新しいブロックが出せなくなるとゲームオーバーです。</p>
+
+      <div class="touch-only">
+        <h3 class="setting-group">スワイプ操作</h3>
+        <ul class="keys keys-help">
+          <li><span>左右になぞる</span>移動</li>
+          <li><span>下になぞる</span>ソフトドロップ</li>
+          <li><span>下にフリック</span>ハードドロップ</li>
+          <li><span>タップ（左半分 / 右半分）</span>左回転 / 右回転</li>
+          <li><span>上にフリック・HOLD 枠をタップ</span>ホールド</li>
+        </ul>
+      </div>
+
+      <h3 class="setting-group">キーボード</h3>
+      <ul class="keys keys-help">
+        <li><span><kbd>←</kbd><kbd>→</kbd></span>移動（長押しで連続）</li>
+        <li><span><kbd>↓</kbd></span>ソフトドロップ</li>
+        <li><span><kbd>Space</kbd></span>ハードドロップ</li>
+        <li><span><kbd>↑</kbd><kbd>X</kbd></span>右回転</li>
+        <li><span><kbd>Z</kbd></span>左回転</li>
+        <li><span><kbd>C</kbd><kbd>Shift</kbd></span>ホールド（1 手に 1 回）</li>
+        <li><span><kbd>Esc</kbd><kbd>P</kbd></span>ポーズ / 再開</li>
+        <li><span><kbd>R</kbd></span>リスタート（ポーズ中）</li>
+      </ul>
+
+      <h3 class="setting-group">得点</h3>
+      <table class="score-table">
+        <tbody>
+          <tr><th>1 ライン</th><td>100 × Lv</td></tr>
+          <tr><th>2 ライン</th><td>300 × Lv</td></tr>
+          <tr><th>3 ライン</th><td>700 × Lv</td></tr>
+          <tr><th>4 ライン</th><td>1,500 × Lv</td></tr>
+          <tr><th>5 ライン <em>PENTA</em></th><td>5,000 × Lv</td></tr>
+          <tr><th>スピンで 1 / 2 / 3 ライン</th><td>400 / 1,000 / 1,800 × Lv</td></tr>
+          <tr><th>スピンで 4 / 5 ライン</th><td>3,000 / 7,500 × Lv</td></tr>
+          <tr><th>Back-to-Back</th><td>上の基本点 × 1.5</td></tr>
+          <tr><th>REN（連続消し）</th><td>+50 × REN × Lv（10 REN まで）</td></tr>
+          <tr><th>全消し</th><td>+3,000 × Lv</td></tr>
+          <tr><th>ソフト / ハードドロップ</th><td>1 / 2 点 × マス</td></tr>
+        </tbody>
+      </table>
+      <p class="help-note"><b>スピン</b>: 最後の操作が回転で、固定するときに左右・上のどこにも動けない置き方。<br><b>Back-to-Back</b>: 4 ライン以上かスピンでの消去を、ほかの消し方を挟まずに続けること。<br>ピースは 18 種類を 1 個ずつ袋に入れて順に出すので、同じ形が 35 手以上来ないことはありません。<br>10 ライン消すごとにレベルが上がり、落下が速くなります。<br><b>500 PIECES</b>: 500 手置いた時点のスコアを競うモード。</p>
+      <footer class="dialog-foot">
+        <span></span>
+        <button class="btn primary small" value="close">OK</button>
+      </footer>
+    </form>
+  </dialog>
+
+  <script src="./js/pieces.js"></script>
+  <script src="./js/game.js"></script>
+  <script src="./js/renderer.js"></script>
+  <script src="./js/audio.js"></script>
+  <script src="./js/input.js"></script>
+  <script src="./js/touch.js"></script>
+  <script src="./js/ai.js"></script>
+  <script src="./js/ai-weights.js"></script>
+  <script src="./js/main.js"></script>
 </body>
 </html>
