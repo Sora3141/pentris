@@ -25,6 +25,8 @@ function mulberry32(seed) {
 }
 
 // DOM に依存しないゲーム本体。状態の変化はイベントで通知する。
+// board の値: 0 = 空き、それ以外 = (置いたピースの通し番号 << 2) | (CHIRAL + 1)。
+// 通し番号は、同じピースのマスをつなげて描くのに使う（renderer.js）。
 class Game {
   constructor(handlers = {}) {
     this.on = handlers;
@@ -50,6 +52,7 @@ class Game {
     this.finished = false;
     this.queue = [];
     this.bag = [];
+    this.serial = 0;
     this.hold = null;
     this.canHold = true;
     this.cur = null;
@@ -289,8 +292,9 @@ class Game {
     const c = this.cur;
     const cells = this.cells();
     const spin = this.isSpin();
+    const mark = (++this.serial << 2) | (PIECES[c.id].chiral + 1);
     for (const [x, y] of cells) {
-      if (y >= 0) this.board[y][x] = c.id + 1;
+      if (y >= 0) this.board[y][x] = mark;
     }
     this.pieces++;
     const lockOut = cells.every(([, y]) => y < HIDDEN);
@@ -300,6 +304,7 @@ class Game {
       if (this.board[y].every(v => v)) cleared.push(y);
     }
     const clearedCells = cleared.map(y => this.board[y].slice());
+    if (cleared.length) this.splitPieces(cleared);
     for (const y of cleared) {
       this.board.splice(y, 1);
       this.board.unshift(new Array(COLS).fill(0));
@@ -338,6 +343,33 @@ class Game {
     }
     this.canHold = true;
     this.next();
+  }
+
+  // 消える行で切れたピースは、残った部分ごとに別のピースとして番号を付け直す
+  // （消えたあとに上下がくっついても、1 つの形としてつなげて描かないように）
+  splitPieces(cleared) {
+    const gone = new Set(cleared);
+    const b = this.board;
+    const done = b.map(row => row.map(() => false));
+    for (let y = 0; y < TOTAL_ROWS; y++) {
+      if (gone.has(y)) continue;
+      for (let x = 0; x < COLS; x++) {
+        const v = b[y][x];
+        if (!v || done[y][x]) continue;
+        const mark = (++this.serial << 2) | (v & 3);
+        const stack = [[x, y]];
+        done[y][x] = true;
+        while (stack.length) {
+          const [cx, cy] = stack.pop();
+          b[cy][cx] = mark;
+          for (const [nx, ny] of [[cx + 1, cy], [cx - 1, cy], [cx, cy + 1], [cx, cy - 1]]) {
+            if (nx < 0 || nx >= COLS || ny < 0 || ny >= TOTAL_ROWS || gone.has(ny) || done[ny][nx] || b[ny][nx] !== v) continue;
+            done[ny][nx] = true;
+            stack.push([nx, ny]);
+          }
+        }
+      }
+    }
   }
 
   gameOver() {

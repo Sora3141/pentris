@@ -59,31 +59,36 @@
   <canvas id="backdrop" aria-hidden="true"></canvas>
 
   <main class="app" id="app">
-    <!-- 左パネル -->
-    <aside class="side side-left">
-      <div class="brand"><span>QUINTILE</span></div>
-
-      <section class="card hold-card">
-        <header class="card-head"><span>HOLD</span><kbd>C</kbd></header>
+    <!-- 上の帯: HOLD / 点 / NEXT / ポーズ -->
+    <header class="band">
+      <button class="slot hold" id="hold-slot" aria-label="HOLD">
+        <span class="slot-label">HOLD</span>
         <canvas id="hold" class="preview"></canvas>
-      </section>
-
-      <section class="card stats-card">
-        <div class="stat stat-score">
-          <span class="label">SCORE</span>
-          <output id="score" class="value">0</output>
-        </div>
-        <div class="stat-row">
-          <div class="stat"><span class="label">LEVEL</span><output id="level" class="value">1</output></div>
-          <div class="stat"><span class="label">LINES</span><output id="lines" class="value">0</output></div>
-          <div class="stat stat-time"><span class="label" id="stat3-label">TIME</span><output id="time" class="value">0:00</output></div>
+      </button>
+      <div class="stats">
+        <output id="score" class="score">0</output>
+        <div class="minis">
+          <span><i>LV</i><b id="level">1</b></span>
+          <span><i>LINES</i><b id="lines">0</b></span>
+          <span><i>BEST</i><b id="best">0</b></span>
+          <span><i id="stat3-label">TIME</i><b id="time">0:00</b></span>
         </div>
         <div class="progress" aria-hidden="true"><i id="progress"></i></div>
-        <div class="stat stat-best"><span class="label">BEST</span><output id="best" class="value">0</output></div>
-      </section>
-
-      <div class="ren" id="ren" aria-live="polite"><b id="ren-count">0</b><span>REN</span></div>
-    </aside>
+      </div>
+      <div class="slot next">
+        <span class="slot-label">NEXT</span>
+        <div class="next-row">
+          <canvas id="next0" class="preview big"></canvas>
+          <div class="next-rest">
+            <canvas id="next1" class="preview"></canvas>
+            <canvas id="next2" class="preview"></canvas>
+            <canvas id="next3" class="preview"></canvas>
+            <canvas id="next4" class="preview"></canvas>
+          </div>
+        </div>
+      </div>
+      <button class="icon-btn pause-btn" data-act="pause" aria-label="ポーズ"><svg><use href="#i-pause"/></svg></button>
+    </header>
 
     <!-- 盤面 -->
     <div class="well" id="well">
@@ -115,6 +120,7 @@
           <div class="app-row">
             <button class="btn ghost" data-wak="install" hidden><svg><use href="#i-install"/></svg>アプリにする</button>
             <button class="btn ghost" data-wak="share"><svg><use href="#i-share"/></svg>共有</button>
+            <button class="btn ghost" data-act="sound" id="btn-sound" aria-label="音のオン・オフ"><svg><use href="#i-sound"/></svg></button>
           </div>
           <p class="ov-best">BEST <b id="title-best">0</b></p>
           <p class="version" id="version"></p>
@@ -169,42 +175,7 @@
         </div>
       </div>
       </div>
-      <div class="gesture-zone" aria-hidden="true">
-        <span><svg><use href="#i-swipe"/></svg>なぞって移動</span>
-        <span><svg><use href="#i-tap"/></svg>タップで回転</span>
-      </div>
     </div>
-
-    <!-- 右パネル -->
-    <aside class="side side-right">
-      <section class="card next-card">
-        <header class="card-head"><span>NEXT</span></header>
-        <canvas id="next0" class="preview preview-main"></canvas>
-        <div class="next-rest">
-          <canvas id="next1" class="preview"></canvas>
-          <canvas id="next2" class="preview"></canvas>
-          <canvas id="next3" class="preview"></canvas>
-          <canvas id="next4" class="preview"></canvas>
-        </div>
-      </section>
-
-      <div class="toolbar">
-        <button class="icon-btn" data-act="pause" title="ポーズ (Esc)" aria-label="ポーズ"><svg><use href="#i-pause"/></svg></button>
-        <button class="icon-btn" data-act="sound" title="サウンド" aria-label="サウンド切替" id="btn-sound"><svg><use href="#i-sound"/></svg></button>
-        <button class="icon-btn" data-act="settings" title="設定" aria-label="設定"><svg><use href="#i-gear"/></svg></button>
-        <button class="icon-btn" data-act="help" title="操作方法" aria-label="操作方法"><svg><use href="#i-help"/></svg></button>
-      </div>
-
-      <ul class="keys">
-        <li><span><kbd>←</kbd><kbd>→</kbd></span>移動</li>
-        <li><span><kbd>↓</kbd></span>ソフトドロップ</li>
-        <li><span><kbd>Space</kbd></span>ハードドロップ</li>
-        <li><span><kbd>↑</kbd><kbd>X</kbd></span>右回転</li>
-        <li><span><kbd>Z</kbd></span>左回転</li>
-        <li><span><kbd>C</kbd><kbd>Shift</kbd></span>ホールド</li>
-        <li><span><kbd>Esc</kbd><kbd>P</kbd></span>ポーズ</li>
-      </ul>
-    </aside>
 
     <!-- タッチ操作（ボタン） -->
     <div class="pads">
@@ -304,6 +275,7 @@
         <button class="icon-btn" value="close" aria-label="閉じる"><svg><use href="#i-close"/></svg></button>
       </header>
       <p class="help-lead">落ちてくる 5 マスのブロック（ペントミノ）を並べて、横一列を揃えると消えます。一度に多く消すほど高得点。積み上がって新しいブロックが出せなくなるとゲームオーバーです。</p>
+      <p class="help-note">形は 18 種類を 1 個ずつ入れた袋から順に出る。色は 3 つ: <b class="c-sym">左右対称</b>・<b class="c-right">右向き</b>・<b class="c-left">左向き</b>（鏡に映すと入れ替わる形）。</p>
 
       <div class="touch-only">
         <h3 class="setting-group">スワイプ操作</h3>

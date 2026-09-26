@@ -41,16 +41,12 @@ const el = {
   stage: $('#stage'),
   board: $('#board'),
   callouts: $('#callouts'),
-  sideLeft: $('.side-left'),
-  sideRight: $('.side-right'),
   score: $('#score'),
   level: $('#level'),
   lines: $('#lines'),
   time: $('#time'),
   best: $('#best'),
   progress: $('#progress'),
-  ren: $('#ren'),
-  renCount: $('#ren-count'),
   hold: $('#hold'),
   next: [0, 1, 2, 3, 4].map(i => $('#next' + i)),
   gallery: $('#gallery'),
@@ -356,15 +352,6 @@ function updateHUD() {
   el.progress.style.width = `${(game.lines % LINES_PER_LEVEL) * (100 / LINES_PER_LEVEL)}%`;
   el.best.textContent = Math.max(best, game.score).toLocaleString();
   if (mode().limit) el.time.textContent = Math.max(0, mode().limit - game.pieces);
-
-  const showRen = game.ren > 0;
-  el.ren.classList.toggle('show', showRen);
-  if (showRen) {
-    el.renCount.textContent = game.ren;
-    el.ren.classList.remove('pop');
-    void el.ren.offsetWidth;
-    el.ren.classList.add('pop');
-  }
 }
 
 function tickHUD(dt) {
@@ -437,24 +424,12 @@ function tickShake(dt) {
 // ==================== レイアウト ====================
 function layout() {
   backdrop.resize();
-  const mobile = window.matchMedia('(max-width: 760px)').matches;
   const border = parseFloat(getComputedStyle(el.frame).borderTopWidth) || 0;
   const rect = el.well.getBoundingClientRect();
-  const zone = $('.gesture-zone');
-  const zoneOn = getComputedStyle(zone).display !== 'none';
-  let availW = rect.width;
-  const availH = rect.height - (zoneOn ? parseFloat(getComputedStyle(el.well).rowGap) || 0 : 0);
-  if (!mobile) {
-    const cs = getComputedStyle(el.app);
-    const gap = parseFloat(cs.columnGap) || 0;
-    const pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-    availW = window.innerWidth - el.sideLeft.offsetWidth - el.sideRight.offsetWidth - gap * 2 - pad;
-  }
-  const cell = Math.max(8, Math.floor(Math.min((availW - border * 2) / COLS, (availH - border * 2) / ROWS)));
+  const cell = Math.max(8, Math.floor(Math.min((rect.width - border * 2) / COLS, (rect.height - border * 2) / ROWS)));
   el.frame.style.width = el.stage.style.width = `${cell * COLS + border * 2}px`;
   el.frame.style.height = el.stage.style.height = `${cell * ROWS + border * 2}px`;
   renderer.resize(cell);
-  zone.style.visibility = zoneOn && zone.clientHeight < 48 ? 'hidden' : '';
   drawQueue();
   drawHold();
   drawGallery(el.gallery);
@@ -669,7 +644,7 @@ document.querySelectorAll('.pad-btn').forEach(btn => {
 });
 
 // HOLD 枠のタップでもホールド
-$('.hold-card').addEventListener('pointerdown', e => {
+$('#hold-slot').addEventListener('pointerdown', e => {
   if (state !== 'playing' || aiCtl.on) return;
   e.preventDefault();
   game.holdPiece();
